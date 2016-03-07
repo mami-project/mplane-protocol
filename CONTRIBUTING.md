@@ -1,24 +1,4 @@
-# mPlane Protocol Specification
-
-This is the working area for the Individual internet-draft, "mPlane Protocol Specification".
-
-* [Editor's copy](https://mami-project.github.io/mplane-protocol/)
-* [Individual Draft] (https://tools.ietf.org/html/draft-trammell-mplane-protocol)
-
-
-## Building the Draft
-
-Formatted text and HTML versions of the draft can be built using `make`.
-
-```sh
-$ make
-```
-
-This requires that you have the necessary software installed.  See [the
-instructions](https://github.com/martinthomson/i-d-template/blob/master/doc/SETUP.md).
-
-
-## Contributing
+# Contributing
 
 Before submitting feedback, please familiarize yourself with our current issues
 list and review the [working group

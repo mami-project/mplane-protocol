@@ -74,13 +74,8 @@ information model, and {{representations-and-session-protocols}} defines the
 representations of this data model and session protocols over which mPlane is
 supported.
 
-Present implementation work is focused on mPlane represented in JSON using
-WebSockets {{RFC6455}} as a session protocol. {{workflows-in-websockets}}
-demonstrates how mPlane's separation of connection initiation and message
-initiation works in this environment. Previous versions of the mPlane protocol
-used HTTPS as a session protocol {{RFC3205}}, but the asynchronous message-
-oriented exchanges on which mPlane is built is more suited to a channel-
-oriented session layer such as WebSockets.
+Present work is focused on mPlane represented in JSON using WebSockets
+{{RFC6455}} as a session protocol. 
 
 This revision of the document describes Version 2 of the mPlane protocol. 
 

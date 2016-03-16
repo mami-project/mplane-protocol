@@ -9,7 +9,7 @@ Expires: September 19, 2016                               March 18, 2016
 
 
                      mPlane Protocol Specification
-                   draft-trammell-mplane-protocol-01
+                 draft-trammell-mplane-protocol-latest
 
 Abstract
 
@@ -81,31 +81,31 @@ Table of Contents
        3.2.3.  Supervisors and Federation  . . . . . . . . . . . . .  10
        3.2.4.  External Interfaces to mPlane Entities  . . . . . . .  12
      3.3.  Message Types and Message Exchange Sequences  . . . . . .  12
-     3.4.  Integrating Measurement Tools into mPlane . . . . . . . .  13
+     3.4.  Integrating Measurement Tools into mPlane . . . . . . . .  14
      3.5.  From Architecture to Protocol Specification . . . . . . .  14
    4.  Protocol Information Model  . . . . . . . . . . . . . . . . .  14
      4.1.  Element Registry  . . . . . . . . . . . . . . . . . . . .  14
-       4.1.1.  Structured Element Names  . . . . . . . . . . . . . .  15
-       4.1.2.  Primitive Types . . . . . . . . . . . . . . . . . . .  16
+       4.1.1.  Structured Element Names  . . . . . . . . . . . . . .  16
+       4.1.2.  Primitive Types . . . . . . . . . . . . . . . . . . .  17
        4.1.3.  Augmented Registry Information  . . . . . . . . . . .  17
-     4.2.  Message Types . . . . . . . . . . . . . . . . . . . . . .  17
+     4.2.  Message Types . . . . . . . . . . . . . . . . . . . . . .  18
        4.2.1.  Capability and Withdrawal . . . . . . . . . . . . . .  18
-       4.2.2.  Specification and Interrupt . . . . . . . . . . . . .  18
-       4.2.3.  Result  . . . . . . . . . . . . . . . . . . . . . . .  18
+       4.2.2.  Specification and Interrupt . . . . . . . . . . . . .  19
+       4.2.3.  Result  . . . . . . . . . . . . . . . . . . . . . . .  19
        4.2.4.  Receipt and Redemption  . . . . . . . . . . . . . . .  19
-       4.2.5.  Exception . . . . . . . . . . . . . . . . . . . . . .  19
+       4.2.5.  Exception . . . . . . . . . . . . . . . . . . . . . .  20
        4.2.6.  Envelope  . . . . . . . . . . . . . . . . . . . . . .  20
      4.3.  Message Sections  . . . . . . . . . . . . . . . . . . . .  20
        4.3.1.  Message Type and Verb . . . . . . . . . . . . . . . .  21
-       4.3.2.  Version . . . . . . . . . . . . . . . . . . . . . . .  21
-       4.3.3.  Registry  . . . . . . . . . . . . . . . . . . . . . .  21
-       4.3.4.  Label . . . . . . . . . . . . . . . . . . . . . . . .  22
-       4.3.5.  Temporal Scope (When) . . . . . . . . . . . . . . . .  22
-       4.3.6.  Parameters  . . . . . . . . . . . . . . . . . . . . .  24
-       4.3.7.  Metadata  . . . . . . . . . . . . . . . . . . . . . .  25
-       4.3.8.  Result Columns and Values . . . . . . . . . . . . . .  25
-       4.3.9.  Export  . . . . . . . . . . . . . . . . . . . . . . .  26
-       4.3.10. Link  . . . . . . . . . . . . . . . . . . . . . . . .  26
+       4.3.2.  Version . . . . . . . . . . . . . . . . . . . . . . .  22
+       4.3.3.  Registry  . . . . . . . . . . . . . . . . . . . . . .  22
+       4.3.4.  Label . . . . . . . . . . . . . . . . . . . . . . . .  23
+       4.3.5.  Temporal Scope (When) . . . . . . . . . . . . . . . .  23
+       4.3.6.  Parameters  . . . . . . . . . . . . . . . . . . . . .  25
+       4.3.7.  Metadata  . . . . . . . . . . . . . . . . . . . . . .  26
+       4.3.8.  Result Columns and Values . . . . . . . . . . . . . .  26
+       4.3.9.  Export  . . . . . . . . . . . . . . . . . . . . . . .  27
+       4.3.10. Link  . . . . . . . . . . . . . . . . . . . . . . . .  27
 
 
 
@@ -114,35 +114,35 @@ Trammell & Kuehlewind  Expires September 19, 2016               [Page 2]
 Internet-Draft               mPlane Protocol                  March 2016
 
 
-       4.3.11. Token . . . . . . . . . . . . . . . . . . . . . . . .  27
-       4.3.12. Contents  . . . . . . . . . . . . . . . . . . . . . .  27
-     4.4.  Message Uniqueness and Idempotence  . . . . . . . . . . .  28
-       4.4.1.  Message Schema  . . . . . . . . . . . . . . . . . . .  28
-       4.4.2.  Message Identity  . . . . . . . . . . . . . . . . . .  28
-     4.5.  Designing Measurement and Repository Schemas  . . . . . .  29
-   5.  Representations and Session Protocols . . . . . . . . . . . .  30
-     5.1.  JSON representation . . . . . . . . . . . . . . . . . . .  30
-       5.1.1.  Textual representations of element values . . . . . .  31
+       4.3.11. Token . . . . . . . . . . . . . . . . . . . . . . . .  28
+       4.3.12. Contents  . . . . . . . . . . . . . . . . . . . . . .  28
+     4.4.  Message Uniqueness and Idempotence  . . . . . . . . . . .  29
+       4.4.1.  Message Schema  . . . . . . . . . . . . . . . . . . .  29
+       4.4.2.  Message Identity  . . . . . . . . . . . . . . . . . .  29
+     4.5.  Designing Measurement and Repository Schemas  . . . . . .  30
+   5.  Representations and Session Protocols . . . . . . . . . . . .  31
+     5.1.  JSON representation . . . . . . . . . . . . . . . . . . .  31
+       5.1.1.  Textual representations of element values . . . . . .  32
        5.1.2.  Example mPlane Capabilities and Specifications in
-               JSON  . . . . . . . . . . . . . . . . . . . . . . . .  32
-     5.2.  mPlane over WebSockets over TLS . . . . . . . . . . . . .  37
-       5.2.1.  mPlane PKI for WebSockets . . . . . . . . . . . . . .  38
-       5.2.2.  Capability Advertisement for WebSockets . . . . . . .  38
-       5.2.3.  mPlane Link and Export URLs for WebSockets  . . . . .  38
-   6.  Deployment Considerations . . . . . . . . . . . . . . . . . .  39
-     6.1.  The Role of the Supervisor  . . . . . . . . . . . . . . .  39
-       6.1.1.  Component Registration  . . . . . . . . . . . . . . .  40
-       6.1.2.  Client Authentication . . . . . . . . . . . . . . . .  40
+               JSON  . . . . . . . . . . . . . . . . . . . . . . . .  33
+     5.2.  mPlane over WebSockets over TLS . . . . . . . . . . . . .  39
+       5.2.1.  mPlane PKI for WebSockets . . . . . . . . . . . . . .  40
+       5.2.2.  Capability Advertisement for WebSockets . . . . . . .  40
+       5.2.3.  mPlane Link and Export URLs for WebSockets  . . . . .  40
+   6.  Deployment Considerations . . . . . . . . . . . . . . . . . .  41
+     6.1.  The Role of the Supervisor  . . . . . . . . . . . . . . .  41
+       6.1.1.  Component Registration  . . . . . . . . . . . . . . .  42
+       6.1.2.  Client Authentication . . . . . . . . . . . . . . . .  42
        6.1.3.  Capability Composition and Specification
-               Decomposition . . . . . . . . . . . . . . . . . . . .  41
-     6.2.  Indirect Export . . . . . . . . . . . . . . . . . . . . .  41
-     6.3.  Error Handling in mPlane Workflows  . . . . . . . . . . .  42
-   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  42
-   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  43
-   9.  Contributors  . . . . . . . . . . . . . . . . . . . . . . . .  43
-   10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  43
-   11. Informative References  . . . . . . . . . . . . . . . . . . .  43
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  45
+               Decomposition . . . . . . . . . . . . . . . . . . . .  43
+     6.2.  Indirect Export . . . . . . . . . . . . . . . . . . . . .  43
+     6.3.  Error Handling in mPlane Workflows  . . . . . . . . . . .  44
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  44
+   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  45
+   9.  Contributors  . . . . . . . . . . . . . . . . . . . . . . . .  45
+   10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  45
+   11. Informative References  . . . . . . . . . . . . . . . . . . .  45
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  47
 
 1.  Introduction
 
@@ -173,7 +173,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 1.1.  Changes from Revision -00 (Protocol version 1)
 
    o  WebSockets has been added as a session protocol for the mPlane
-      protocol.
+      protocol.  Message flow has been modified to git
 
    o  Redemptions have been expanded to allow temporally-scoped partial
       redemption of long-running measurements.
@@ -182,11 +182,9 @@ Internet-Draft               mPlane Protocol                  March 2016
       objects to be represented directly in mPlane messages using the
       underlying representation.
 
-   o  A number of obsolete features have been deprecated, and removed
-      from the protcol description:
-
-      *  The Indirection message type, as the same functionality is
-         available for all message types using the link section.
+   o  A number of obsolete features have been deprecated based on
+      implementation and pilot deployment experience, and removed from
+      the protocol description:
 
       *  HTTPS as a session protocol, as it is a poor fit for mPlane's
          exchanges
@@ -194,19 +192,22 @@ Internet-Draft               mPlane Protocol                  March 2016
       *  Callback control, as it is no longer needed without the
          limitations of HTTPS as a session protocol
 
+      *  The Indirection message type, as the same functionality is
+         available for all message types using the link section.
+
       *  Repeating measurements, as their functionality has been
          replaced by partial redemption
 
    o  References to the "core" registry have been removed, as all
       element registries must in any case be explicitly defined in
       mPlane capabilities, specifications, and results.  An eventual
-      proposed standard mPlane protocol, if such is ever proposed, would
-      refer to an IANA-managed core registry.
+      proposed standard mPlane protocol would refer to an IANA-managed
+      core registry.
 
 2.  Terminology
 
-   [EDITOR'S NOTE: these terms are not capitalized within the document
-   at this time.  Fix this.]
+   [EDITOR'S NOTE: these terms are not necessarily capitalized within
+   the document at this time.  Fix this.]
 
    Client:  An entity which implements the mPlane protocol, receives
       capabilities published by one or more components, and sends
@@ -217,7 +218,6 @@ Internet-Draft               mPlane Protocol                  March 2016
       within this document, advertises its capabilities and accepts
       specifications which request the use of those capabilities.  The
       measurements, analyses, storage facilities and other services
-
 
 
 
@@ -661,11 +661,11 @@ Internet-Draft               mPlane Protocol                  March 2016
    Exceptions can be sent by clients or components at any time to signal
    protocol-level errors to their peers.
 
-   In the nominal sequence, a capability leads to a specification leads
-   to a result, where results may be transmitted by some other protocol.
-   All the paths through the sequence of messages are shown in the
-   diagram below; message types are described in detail in Section 4.2.
-   In the diagram, solid lines mean a message is sent in reply to the
+   The following sequences of messages are possible within the mPlane
+   protocol:
+
+
+
 
 
 
@@ -674,12 +674,34 @@ Trammell & Kuehlewind  Expires September 19, 2016              [Page 12]
 Internet-Draft               mPlane Protocol                  March 2016
 
 
-   previous message in sequence (i.e. a component sends a capability,
-   and a client replies or follows with a specification), and dashed
-   lines mean a message is sent as a followup (i.e., a component sends a
-   capability, then sends a withdrawal to cancel that capability).
-   Messages at the top of the diagram are sent by components, at the
-   bottom by clients.
+   Client                 Component
+     |<---------- Capability -|   ( direct response )
+     |- Specification ------->|
+     |<-------------- Result -|
+     |                        |
+     |<---------- Capability -|   ( delayed response )
+     |- Specification ------->|
+     |<------------- Receipt -|
+     |         . . .          |
+     |- (Redemption) -------->|
+     |<-------------- Result -|
+     |                        |
+     |<---------- Capability -|   ( indirect export )
+     |- Specification ------->|
+     |<------------- Receipt -|
+     |.... indirect export ...|
+     |- (Interrupt) --------->|
+     |                        |
+     |<---------- Capability -|   ( eventual withdrawal )
+     |         . . .          |
+     |<---------- Withdrawal -|
+
+      Figure 4: Possible sequences of messages in the mPlane protocol
+
+   In the nominal sequence, a capability leads to a specification leads
+   to a result, where results may be transmitted by some other protocol.
+   All the paths through the sequence of messages are shown in the
+   diagram above; message types are described in detail in Section 4.2.
 
    Separate from the sequence of messages, the mPlane protocol supports
    two connection establishment patterns:
@@ -700,6 +722,14 @@ Internet-Draft               mPlane Protocol                  March 2016
 
    Within a given mPlane domain, these patterns can be combined (along
    with indirect export and direct access) to facilitate complex
+
+
+
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 13]
+
+Internet-Draft               mPlane Protocol                  March 2016
+
+
    interactions among clients and components according to the
    requirements imposed by the application and the deployment of
    components in the network.
@@ -720,15 +750,6 @@ Internet-Draft               mPlane Protocol                  March 2016
    The parameters and result columns make up the measurement's schema,
    and are chosen from an extensible registry of elements.  Practical
    details are given in Section 4.5.
-
-
-
-
-
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 13]
-
-Internet-Draft               mPlane Protocol                  March 2016
-
 
 3.5.  From Architecture to Protocol Specification
 
@@ -758,6 +779,13 @@ Internet-Draft               mPlane Protocol                  March 2016
    metadata, and result columns for mPlane statements.  A registry is
    represented as a JSON [RFC7159] object with the following keys:
 
+
+
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 14]
+
+Internet-Draft               mPlane Protocol                  March 2016
+
+
    o  registry-format: currently "mplane-0", determines the supported
       features of the registry format.
 
@@ -776,15 +804,6 @@ Internet-Draft               mPlane Protocol                  March 2016
       keys:
 
       *  name: The name of the element.
-
-
-
-
-
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 14]
-
-Internet-Draft               mPlane Protocol                  March 2016
-
 
    o  prim: The name of the primitive type of the element, from the list
       of primitives in Section 4.1.2.
@@ -814,6 +833,15 @@ Internet-Draft               mPlane Protocol                  March 2016
      ]
    }
 
+
+
+
+
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 15]
+
+Internet-Draft               mPlane Protocol                  March 2016
+
+
    Fully qualified element names consist of the element's name as an
    anchor after the URI from which the element came, e.g.
    "https://example.com/mplane/registry/core#full.structured.name".
@@ -834,13 +862,6 @@ Internet-Draft               mPlane Protocol                  March 2016
       basename '"source"' relate to the source of a packet, flow, active
       measurement, etc.; and elements with basename '"delay"'' relate to
       the measured delay of an operation.
-
-
-
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 15]
-
-Internet-Draft               mPlane Protocol                  March 2016
-
 
    o  modifier: zero or more, additional information differentiating
       elements with the same basename from each other.  Modifiers may
@@ -869,6 +890,14 @@ Internet-Draft               mPlane Protocol                  March 2016
 
       *  "NNpct" (where NN is a two-digit number 01-99): percentile
 
+
+
+
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 16]
+
+Internet-Draft               mPlane Protocol                  March 2016
+
+
       *  "median": shorthand for and equivalent to "50pct".
 
       *  "count": count of values aggregated
@@ -890,13 +919,6 @@ Internet-Draft               mPlane Protocol                  March 2016
    o  natural: an unsigned integer
 
    o  real: a real (floating-point) number
-
-
-
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 16]
-
-Internet-Draft               mPlane Protocol                  March 2016
-
 
    o  bool: a true or false (boolean) value
 
@@ -925,6 +947,13 @@ Internet-Draft               mPlane Protocol                  March 2016
       element is expressed; equal to the units part of a structured name
       if present.
 
+
+
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 17]
+
+Internet-Draft               mPlane Protocol                  March 2016
+
+
    o  ipfix-eid: The element ID of the equivalent IPFIX [RFC7011]
       Information Element.
 
@@ -946,14 +975,6 @@ Internet-Draft               mPlane Protocol                  March 2016
    notifications.  Types of notifications include Withdrawals,
    Interrupts, Receipts, Redemptions, and Exceptions.  These notify
    clients or components of conditions within the measurement
-
-
-
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 17]
-
-Internet-Draft               mPlane Protocol                  March 2016
-
-
    infrastructure itself, as opposed to directly containing information
    about measurements or observations.
 
@@ -977,6 +998,17 @@ Internet-Draft               mPlane Protocol                  March 2016
    previously advertised capability.  A withdrawal can also be sent in
    reply to a specification which attempts to invoke a capability no
    longer offered.
+
+
+
+
+
+
+
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 18]
+
+Internet-Draft               mPlane Protocol                  March 2016
+
 
 4.2.2.  Specification and Interrupt
 
@@ -1002,14 +1034,6 @@ Internet-Draft               mPlane Protocol                  March 2016
    keeping with the stateless nature of the mPlane protocol, a result
    contains the full set of parameters from which it was derived.
 
-
-
-
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 18]
-
-Internet-Draft               mPlane Protocol                  March 2016
-
-
    Note that not every specification will lead to a result being
    returned; for example, in case of indirect export, only a receipt
    which can be used for future interruption will be returned, as the
@@ -1033,6 +1057,15 @@ Internet-Draft               mPlane Protocol                  March 2016
 
    A redemption is sent from a client to a component for a previously
    received receipt to attempt to retrieve delayed results.  It may
+
+
+
+
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 19]
+
+Internet-Draft               mPlane Protocol                  March 2016
+
+
    contain only the token section, the token and temporal scope, or all
    sections of the received receipt.
 
@@ -1044,6 +1077,10 @@ Internet-Draft               mPlane Protocol                  March 2016
    result only when the measurement is complete; otherwise, another
    receipt is returned.
 
+   Note that redemptions are optional: when a component has a result
+   available for a client after some period of time, it may send it
+   immediately, without waiting for a redemption to retrieve it.
+
 4.2.5.  Exception
 
    An exception is sent from a client to a component or from a component
@@ -1054,17 +1091,6 @@ Internet-Draft               mPlane Protocol                  March 2016
    optional token referring back to the message to which the exception
    is related (if any), and a message section containing free-form,
    preferably human readable information about the exception.
-
-
-
-
-
-
-
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 19]
-
-Internet-Draft               mPlane Protocol                  March 2016
-
 
 4.2.6.  Envelope
 
@@ -1087,33 +1113,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
    Each message is made up of sections, as described in the subsection
    below.  The following table shows the presence of each of these
-   sections in each of the message types supported by mPlane: "req."
-   means the section is required, "opt." means it is optional; see the
-   subsection on each message section for details.
-
-| Section        | Capability | Spec. | Result | Receipt    | Envelope |
-| -------------- | ---------- | ----- | ------ |------------|----------|
-| Verb           | req.       | req   | req.   | req.       |          |
-| Content Type   |            |       |        |            | req.     |
-| `version`      | req.       | req.  | req.   | req.       | req.     |
-| `registry`     | req.       | req.  | req.   | opt.       |          |
-| `label`        | opt.       | opt.  | opt.   | opt.       | opt.     |
-| `when`         | req.       | req.  | req.   | req.       |          |
-| `parameters`   | req./token | req.  | req.   | opt./token |          |
-| `metadata`     | opt./token | opt.  | opt.   | opt./token |          |
-| `results`      | req./token | req.  | req.   | opt./token |          |
-| `resultvalues` |            |       | req.   |            |          |
-| `export`       | opt.       | opt.  | opt.   | opt.       |          |
-| `link`         | opt.       | opt.  |        |            |          |
-| `token`        | opt.       | opt.  | opt.   | opt.       | opt.     |
-| `contents`     |            |       |        |            | req.     |
-
-             Figure 4: Message Sections for Each Message Type
-
-   Withdrawals take the same sections as capabilities; and redemptions
-   and interrupts take the same sections as receipts.  Exceptions are
-   not shown in this table.
-
+   sections in each of the message types supported by mPlane: "req"
 
 
 
@@ -1122,11 +1122,61 @@ Trammell & Kuehlewind  Expires September 19, 2016              [Page 20]
 Internet-Draft               mPlane Protocol                  March 2016
 
 
+   means the section is required, "opt" means it is optional, and "tok"
+   means it may be replaced by reference via a token when available
+   (i.e., in withdrawals and redemptions); see the subsection on each
+   message section for details.
+
+    +----------------+---------+-------+--------+---------+----------+
+    | Section        |   Cap.  | Spec. | Result | Receipt | Envelope |
+    +----------------+---------+-------+--------+---------+----------+
+    | Verb           |   req   |  req  |  req.  | req.    |          |
+    |                |         |       |        |         |          |
+    | Content Type   |         |       |        |         |   req    |
+    |                |         |       |        |         |          |
+    | "version"      |   req   |  req  |  req   | req     |   req    |
+    |                |         |       |        |         |          |
+    | "registry"     |   req   |  req  |  req   | opt     |          |
+    |                |         |       |        |         |          |
+    | "label"        |   opt   |  opt  |  opt   | opt     |   opt    |
+    |                |         |       |        |         |          |
+    | "when"         |   req   |  req  |  req   | req     |          |
+    |                |         |       |        |         |          |
+    | "parameters"   | req/tok |  req  |  req   | opt/tok |          |
+    |                |         |       |        |         |          |
+    | "metadata"     | opt/tok |  opt  |  opt   | opt/tok |          |
+    |                |         |       |        |         |          |
+    | "results"      | req/tok |  req  |  req   | opt/tok |          |
+    |                |         |       |        |         |          |
+    | "resultvalues" |         |       |  req   |         |          |
+    |                |         |       |        |         |          |
+    | "export"       |   opt   |  opt  |  opt   | opt     |          |
+    |                |         |       |        |         |          |
+    | "link"         |   opt   |  opt  |        |         |          |
+    |                |         |       |        |         |          |
+    | "token"        |   opt   |  opt  |  opt   | opt     |   opt    |
+    |                |         |       |        |         |          |
+    | "contents"     |         |       |        |         |   req    |
+    +----------------+---------+-------+--------+---------+----------+
+
+              Table 1: Message Sections for Each Message Type
+
+   Withdrawals take the same sections as capabilities; and redemptions
+   and interrupts take the same sections as receipts.  Exceptions are
+   not shown in this table.
+
 4.3.1.  Message Type and Verb
 
    The verb is the action to be performed by the component.  The
    following verbs are supported by the base mPlane protocol, but
    arbitrary verbs may be specified by applications:
+
+
+
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 21]
+
+Internet-Draft               mPlane Protocol                  March 2016
+
 
    o  "measure": Perform a measurement
 
@@ -1170,16 +1220,19 @@ Internet-Draft               mPlane Protocol                  March 2016
    The "registry" section contains the URL identifying the element
    registry used by this message, and from which the registry can be
    retrieved.  This section is required in all messages containing
+   element names (statements, and receipts/redemptions/interrupts not
+   using tokens for identification; see the "token" section).
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 21]
+
+
+
+
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 22]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
-
-   element names (statements, and receipts/redemptions/interrupts not
-   using tokens for identification; see the "token" section).
 
 4.3.4.  Label
 
@@ -1229,7 +1282,10 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 22]
+
+
+
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 23]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -1285,7 +1341,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 23]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 24]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -1341,7 +1397,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 24]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 25]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -1397,7 +1453,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 25]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 26]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -1453,7 +1509,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 26]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 27]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -1509,7 +1565,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 27]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 28]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -1565,7 +1621,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 28]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 29]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -1621,7 +1677,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 29]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 30]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -1677,7 +1733,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 30]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 31]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -1733,7 +1789,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 31]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 32]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -1789,7 +1845,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 32]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 33]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -1845,7 +1901,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 33]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 34]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -1901,7 +1957,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 34]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 35]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -1957,7 +2013,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 35]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 36]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -2013,7 +2069,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 36]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 37]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -2024,7 +2080,7 @@ Internet-Draft               mPlane Protocol                  March 2016
      "registry":   "https://example.com/mplane/registry/core",
      "label":      "ping-aggregate-query",
      "when":       "past ... future",
-     "link":       "wss://res.example.com:4343/",
+     "link":       "wss://repo.example.com:4343/",
      "parameters": {"source.ip4":      "*",
                     "destination.ip4": "*"},
      "results":    ["delay.twoway.icmp.us.min",
@@ -2036,7 +2092,69 @@ Internet-Draft               mPlane Protocol                  March 2016
 
    The examples in this section use the following registry:
 
-   [TODO]
+     { "registry-format": "mplane-0",
+       "registry-uri", "https://example.com/mplane/registry/core",
+       "registry-revision": 0,
+       "includes": [],
+       "elements": [
+           { "name": "time",
+             "prim": "time",
+             "desc": "Time at which a single observation was taken"
+           },
+           { "name": "source.ip4",
+             "prim": "address",
+             "desc": "Source (or probe) IPv4 address"
+           },
+           { "name": "destination.ip4",
+             "prim": "address",
+             "desc": "Destination (or target) IPv4 address"
+           },
+           { "name": "intermediate.ip4",
+             "prim": "address",
+             "desc": "IPv4 address of intermediate node on a path"
+           },
+           { "name": "hops.ip",
+             "prim": "natural",
+             "desc": "IP-layer hops to identified node"
+           },
+           { "name": "hops.ip.max",
+             "prim": "natural",
+             "desc": "Maximum number of IP-layer hops to measure"
+           },
+           { "name": "delay.twoway.icmp.us",
+
+
+
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 38]
+
+Internet-Draft               mPlane Protocol                  March 2016
+
+
+             "prim": "natural",
+             "desc": "Singleton two-way delay as measured via ICMP Echo"
+           },
+           { "name": "delay.twoway.icmp.us.min",
+             "prim": "natural",
+             "desc": "Minimum two-way delay as measured via ICMP Echo"
+           },
+           { "name": "delay.twoway.icmp.us.50pct",
+             "prim": "natural",
+             "desc": "Median two-way delay as measured via ICMP Echo"
+           },
+           { "name": "delay.twoway.icmp.us.mean",
+             "prim": "natural",
+             "desc": "Mean two-way delay as measured via ICMP Echo"
+           },
+           { "name": "delay.twoway.icmp.us.max",
+             "prim": "natural",
+             "desc": "Maximum two-way delay as measured via ICMP Echo"
+           },
+           { "name": "delay.twoway.icmp.us.count",
+             "prim": "natural",
+             "desc": "Count of two-way delay samples ... "
+           },
+       ]
+     }
 
 5.2.  mPlane over WebSockets over TLS
 
@@ -2060,19 +2178,17 @@ Internet-Draft               mPlane Protocol                  March 2016
    initiated connection establishment, or as WebSockets clients, for
    component-initiated connection establishment.  In either case, it is
    the responsibility of the connection initiator to re-establish
-   connection in case it is lost.  In this case, the entity acting as
-   WebSockets server SHOULD maintain a queue of pending mPlane messages
-   to identified peers to be sent on reconnection.
 
 
 
-
-
-
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 37]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 39]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
+
+   connection in case it is lost.  In this case, the entity acting as
+   WebSockets server SHOULD maintain a queue of pending mPlane messages
+   to identified peers to be sent on reconnection.
 
 5.2.1.  mPlane PKI for WebSockets
 
@@ -2118,18 +2234,18 @@ Internet-Draft               mPlane Protocol                  March 2016
    similarly, directs the component to the WebSockets server to push
    results to.
 
-   Path information in WebSockets URLs is presently unused by the mPlane
-   protocol, but path information MUST be conserved. mPlane clients and
-   components acting as WebSockets servers can use path information as
-   they see fit, for example to separate client and component workflows
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 38]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 40]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
 
+   Path information in WebSockets URLs is presently unused by the mPlane
+   protocol, but path information MUST be conserved. mPlane clients and
+   components acting as WebSockets servers can use path information as
+   they see fit, for example to separate client and component workflows
    on the same server (as on a supervisor), to run mPlane and other
    protocols over WebSockets on the same server, and/or to pass
    cryptographic tokens for additional context separation or
@@ -2174,17 +2290,18 @@ Internet-Draft               mPlane Protocol                  March 2016
    subdomains, or federation of measurement across administrative domain
    boundaries.
 
+
+
+
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 41]
+
+Internet-Draft               mPlane Protocol                  March 2016
+
+
    In the general case, the component first registers with the
    supervisor, POSTing its capabilities.  The supervisor creates
    composed capabilities derived from these component capabilities, and
    makes them available to its client, which GETs them when it connects.
-
-
-
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 39]
-
-Internet-Draft               mPlane Protocol                  March 2016
-
 
    The client then initiates a measurement by POSTing a specification to
    the supervisor, which decomposes it into a more-specific
@@ -2228,19 +2345,17 @@ Internet-Draft               mPlane Protocol                  March 2016
 
    In an mPlane infrastructure, it is therefore the supervisor's
    responsibility to map client identities to the set of capabilities
-   each client is authorized to access.  This mapping is part of the
-   supervisor's configuration.
 
 
 
 
-
-
-
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 40]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 42]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
+
+   each client is authorized to access.  This mapping is part of the
+   supervisor's configuration.
 
 6.1.3.  Capability Composition and Specification Decomposition
 
@@ -2290,10 +2405,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-
-
-
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 41]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 43]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -2349,7 +2461,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 42]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 44]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -2405,7 +2517,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 43]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 45]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -2461,7 +2573,7 @@ Internet-Draft               mPlane Protocol                  March 2016
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 44]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 46]
 
 Internet-Draft               mPlane Protocol                  March 2016
 
@@ -2517,4 +2629,4 @@ Authors' Addresses
 
 
 
-Trammell & Kuehlewind  Expires September 19, 2016              [Page 45]
+Trammell & Kuehlewind  Expires September 19, 2016              [Page 47]

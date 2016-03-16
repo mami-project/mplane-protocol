@@ -341,7 +341,7 @@ li, p {
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Trammell, B., Ed. and M. Kuehlewind, Ed." />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-trammell-mplane-protocol-01" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-trammell-mplane-protocol-latest" />
   <meta name="dct.issued" scheme="ISO8601" content="2016-3-18" />
   <meta name="dct.abstract" content="This document defines the mPlane architecture for coordination of heterogeneous network measurement components: probes and repositories that measure, analyze, and store network measurements, data derived from measurements, and other ancillary data about elements of the network. The architecture is defined in terms of relationships between components and clients which communicate using the mPlane protocol defined in this document." />
   <meta name="description" content="This document defines the mPlane architecture for coordination of heterogeneous network measurement components: probes and repositories that measure, analyze, and store network measurements, data derived from measurements, and other ancillary data about elements of the network. The architecture is defined in terms of relationships between components and clients which communicate using the mPlane protocol defined in this document." />
@@ -375,7 +375,7 @@ li, p {
   </table>
 
   <p class="title">mPlane Protocol Specification<br />
-  <span class="filename">draft-trammell-mplane-protocol-01</span></p>
+  <span class="filename">draft-trammell-mplane-protocol-latest</span></p>
   
   <h1 id="rfc.abstract">
   <a href="#rfc.abstract">Abstract</a>
@@ -479,14 +479,14 @@ li, p {
 <p/>
 
 <ul>
-  <li>WebSockets has been added as a session protocol for the mPlane protocol.</li>
+  <li>WebSockets has been added as a session protocol for the mPlane protocol. Message flow has been modified to git</li>
   <li>Redemptions have been expanded to allow temporally-scoped partial redemption of long-running measurements.</li>
   <li>The &#8220;object&#8221; primitive type has been added to allow structured objects to be represented directly in mPlane messages using the underlying representation.</li>
-  <li>A number of obsolete features have been deprecated, and removed from the protcol description: <ul><li>The Indirection message type, as the same functionality is available for all message types using the link section.</li><li>HTTPS as a session protocol, as it is a poor fit for mPlane&#8217;s exchanges</li><li>Callback control, as it is no longer needed without the limitations of HTTPS as a session protocol</li><li>Repeating measurements, as their functionality has been replaced by partial redemption</li></ul></li>
-  <li>References to the &#8220;core&#8221; registry have been removed, as all element registries must in any case be explicitly defined in mPlane capabilities, specifications, and results. An eventual proposed standard mPlane protocol, if such is ever proposed, would refer to an IANA-managed core registry.</li>
+  <li>A number of obsolete features have been deprecated based on implementation and pilot deployment experience, and removed from the protocol description: <ul><li>HTTPS as a session protocol, as it is a poor fit for mPlane&#8217;s exchanges</li><li>Callback control, as it is no longer needed without the limitations of HTTPS as a session protocol</li><li>The Indirection message type, as the same functionality is available for all message types using the link section.</li><li>Repeating measurements, as their functionality has been replaced by partial redemption</li></ul></li>
+  <li>References to the &#8220;core&#8221; registry have been removed, as all element registries must in any case be explicitly defined in mPlane capabilities, specifications, and results. An eventual proposed standard mPlane protocol would refer to an IANA-managed core registry.</li>
 </ul>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#terminology" id="terminology">Terminology</a></h1>
-<p id="rfc.section.2.p.1">[EDITOR&#8217;S NOTE: these terms are not capitalized within the document at this time. Fix this.]</p>
+<p id="rfc.section.2.p.1">[EDITOR&#8217;S NOTE: these terms are not necessarily capitalized within the document at this time. Fix this.]</p>
 <p/>
 
 <dl>
@@ -616,15 +616,42 @@ li, p {
 <p id="rfc.section.3.2.4.p.3">For exploratory analysis of large amounts of data at a repository, it is presumed that clients will have additional back-channel direct access beyond those interactions mediated by mPlane. For instance, a repository backed by a relational database could have a web-based graphical user interface that interacts directly with the database.</p>
 <h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> <a href="#message-types-and-message-exchange-sequences" id="message-types-and-message-exchange-sequences">Message Types and Message Exchange Sequences</a></h1>
 <p id="rfc.section.3.3.p.1">The basic messages in the mPlane protocol are capabilities, specifications, and results, as described above. The full protocol contains other message types as well. Withdrawals cancel capabilities (i.e., indicate that the component is no longer capable or willing to perform a given measurement) and interrupts cancel specifications (i.e., indicate that the component should stop performing the measurement). Receipts can be given in lieu of results for not-yet completed measurements or queries, and redemptions can be used to retrieve results referred to by a receipt. Exceptions can be sent by clients or components at any time to signal protocol-level errors to their peers.</p>
-<p id="rfc.section.3.3.p.2">In the nominal sequence, a capability leads to a specification leads to a result, where results may be transmitted by some other protocol. All the paths through the sequence of messages are shown in the diagram below; message types are described in detail in <a href="#message-types">Section 4.2</a>. In the diagram, solid lines mean a message is sent in reply to the previous message in sequence (i.e. a component sends a capability, and a client replies or follows with a specification), and dashed lines mean a message is sent as a followup (i.e., a component sends a capability, then sends a withdrawal to cancel that capability). Messages at the top of the diagram are sent by components, at the bottom by clients.</p>
-<p id="rfc.section.3.3.p.3">Separate from the sequence of messages, the mPlane protocol supports two connection establishment patterns:</p>
+<p id="rfc.section.3.3.p.2">The following sequences of messages are possible within the mPlane protocol:</p>
+<div id="rfc.figure.4"/>
+<div id="sequence"/>
+<pre>
+Client                 Component
+  |&lt;---------- Capability -|   ( direct response )
+  |- Specification -------&gt;|
+  |&lt;-------------- Result -|
+  |                        |
+  |&lt;---------- Capability -|   ( delayed response )
+  |- Specification -------&gt;|
+  |&lt;------------- Receipt -|
+  |         . . .          |
+  |- (Redemption) --------&gt;|
+  |&lt;-------------- Result -|
+  |                        |
+  |&lt;---------- Capability -|   ( indirect export )
+  |- Specification -------&gt;|
+  |&lt;------------- Receipt -|
+  |.... indirect export ...|
+  |- (Interrupt) ---------&gt;|
+  |                        |
+  |&lt;---------- Capability -|   ( eventual withdrawal )
+  |         . . .          |
+  |&lt;---------- Withdrawal -|
+</pre>
+<p class="figure">Figure 4: Possible sequences of messages in the mPlane protocol</p>
+<p id="rfc.section.3.3.p.3">In the nominal sequence, a capability leads to a specification leads to a result, where results may be transmitted by some other protocol. All the paths through the sequence of messages are shown in the diagram above; message types are described in detail in <a href="#message-types">Section 4.2</a>.</p>
+<p id="rfc.section.3.3.p.4">Separate from the sequence of messages, the mPlane protocol supports two connection establishment patterns:</p>
 <p/>
 
 <ul>
   <li>Client-initiated, in which clients connect directly to components at known, stable URLs. Client-initiated workflows are intended for use between clients and supervisors, for access to repositories, and for access to probes embedded within a network infrastructure.</li>
   <li>Component-initiated, in which components initiate connections to clients. Component-initiated workflows are intended for use between components without stable routable addresses and supervisors, e.g. for small probes on embedded devices, mobile devices, or software probes embedded in browsers on personal computers behind network-address translators (NATs) or firewalls which prevent a client from establishing a connection to them.</li>
 </ul>
-<p id="rfc.section.3.3.p.5">Within a given mPlane domain, these patterns can be combined (along with indirect export and direct access) to facilitate complex interactions among clients and components according to the requirements imposed by the application and the deployment of components in the network.</p>
+<p id="rfc.section.3.3.p.6">Within a given mPlane domain, these patterns can be combined (along with indirect export and direct access) to facilitate complex interactions among clients and components according to the requirements imposed by the application and the deployment of components in the network.</p>
 <h1 id="rfc.section.3.4"><a href="#rfc.section.3.4">3.4.</a> <a href="#integrating-measurement-tools-into-mplane" id="integrating-measurement-tools-into-mplane">Integrating Measurement Tools into mPlane</a></h1>
 <p id="rfc.section.3.4.p.1">mPlane&#8217;s flexibility and the self-description of measurements provided by the capability-specification-result cycle was designed to allow a wide variety of existing measurement tools, both probes and repositories, to be integrated into an mPlane domain. In both cases, the key to integration is to define a capability for each of the measurements the tool can perform or the queries the repository needs to make available within an mPlane domain. Each capability has a set of parameters - information required to run the measurement or the query - and a set of result columns - information which the measurement or query returns.</p>
 <p id="rfc.section.3.4.p.2">The parameters and result columns make up the measurement&#8217;s schema, and are chosen from an extensible registry of elements. Practical details are given in <a href="#designing-measurement-and-repository-schemas">Section 4.5</a>.</p>
@@ -723,10 +750,11 @@ li, p {
 <p id="rfc.section.4.2.4.p.3">Receipts have the same content specification they are returned for.  A component may optionally add a token section, which can be used in future redemptions or interruptions by the client. The content of the token is an opaque string generated by the component.</p>
 <p id="rfc.section.4.2.4.p.4">A redemption is sent from a client to a component for a previously received receipt to attempt to retrieve delayed results. It may contain only the token section, the token and temporal scope, or all sections of the received receipt.</p>
 <p id="rfc.section.4.2.4.p.5">When the temporal scope of a redemption for a running measurement is different than the temporal scope of the original specification, it is treated by the component as a partial redemption: all rows resulting from the measurement within the specified temporal scope are returned as a result. Otherwise, a component responds with a result only when the measurement is complete; otherwise, another receipt is returned.</p>
+<p id="rfc.section.4.2.4.p.6">Note that redemptions are optional: when a component has a result available for a client after some period of time, it may send it immediately, without waiting for a redemption to retrieve it.</p>
 <h1 id="rfc.section.4.2.5"><a href="#rfc.section.4.2.5">4.2.5.</a> <a href="#exception" id="exception">Exception</a></h1>
-<p id="rfc.section.4.2.5.p.1">An exception is sent from a client to a component or from a component to a client to signal an exceptional condition within the infrastructure itself. They are not meant to signal exceptional conditions within a measurement performed by a component; see <a href="#error-handling-in-mplane-workflows">Section 6.3</a> for more. An exception contains only two sections: an optional token referring back to the message to which the exception is related (if any), and a message section containing free-form, preferably human readable information about the exception.</p>
+<p id="rfc.section.4.2.5.p.1">An exception is sent from a client to a component or from a component to a client to signal an exceptional condition within the infrastructure itself.  They are not meant to signal exceptional conditions within a measurement performed by a component; see <a href="#error-handling-in-mplane-workflows">Section 6.3</a> for more.  An exception contains only two sections: an optional token referring back to the message to which the exception is related (if any), and a message section containing free-form, preferably human readable information about the exception.</p>
 <h1 id="rfc.section.4.2.6"><a href="#rfc.section.4.2.6">4.2.6.</a> <a href="#envelope" id="envelope">Envelope</a></h1>
-<p id="rfc.section.4.2.6.p.1">An envelope is used to contain other messages. Message containment is necessary in contexts in which multiple mPlane messages must be grouped into a single transaction in the underlying session protocol. It is legal to group any kind of message, and to mix messages of different types, in an envelope. However, in the current revision of the protocol, envelopes are primarily intended to be used for three distinct purposes:</p>
+<p id="rfc.section.4.2.6.p.1">An envelope is used to contain other messages. Message containment is necessary in contexts in which multiple mPlane messages must be grouped into a single transaction in the underlying session protocol. It is legal to group any kind of message, and to mix messages of different types, in an envelope.  However, in the current revision of the protocol, envelopes are primarily intended to be used for three distinct purposes:</p>
 <p/>
 
 <ul>
@@ -735,28 +763,160 @@ li, p {
   <li>To group multiple specifications into a single message.</li>
 </ul>
 <h1 id="rfc.section.4.3"><a href="#rfc.section.4.3">4.3.</a> <a href="#message-sections" id="message-sections">Message Sections</a></h1>
-<p id="rfc.section.4.3.p.1">Each message is made up of sections, as described in the subsection below. The following table shows the presence of each of these sections in each of the message types supported by mPlane: &#8220;req.&#8221; means the section is required, &#8220;opt.&#8221; means it is optional; see the subsection on each message section for details.</p>
-<div id="rfc.figure.4"/>
+<p id="rfc.section.4.3.p.1">Each message is made up of sections, as described in the subsection below. The following table shows the presence of each of these sections in each of the message types supported by mPlane: &#8220;req&#8221; means the section is required, &#8220;opt&#8221; means it is optional, and &#8220;tok&#8221; means it may be replaced by reference via a token when available (i.e., in withdrawals and redemptions); see the subsection on each message section for details.</p>
+<div id="rfc.table.1"/>
 <div id="table-messages"/>
-<pre>
-| Section        | Capability | Spec. | Result | Receipt    | Envelope |
-| -------------- | ---------- | ----- | ------ |------------|----------|
-| Verb           | req.       | req   | req.   | req.       |          |
-| Content Type   |            |       |        |            | req.     |
-| `version`      | req.       | req.  | req.   | req.       | req.     |
-| `registry`     | req.       | req.  | req.   | opt.       |          |
-| `label`        | opt.       | opt.  | opt.   | opt.       | opt.     |
-| `when`         | req.       | req.  | req.   | req.       |          |
-| `parameters`   | req./token | req.  | req.   | opt./token |          |
-| `metadata`     | opt./token | opt.  | opt.   | opt./token |          |
-| `results`      | req./token | req.  | req.   | opt./token |          |
-| `resultvalues` |            |       | req.   |            |          |
-| `export`       | opt.       | opt.  | opt.   | opt.       |          |
-| `link`         | opt.       | opt.  |        |            |          |
-| `token`        | opt.       | opt.  | opt.   | opt.       | opt.     |
-| `contents`     |            |       |        |            | req.     |
-</pre>
-<p class="figure">Figure 4: Message Sections for Each Message Type</p>
+<table cellpadding="3" cellspacing="0" class="tt full center">
+  <caption>Message Sections for Each Message Type</caption>
+  <thead>
+    <tr>
+      <th class="left">Section</th>
+      <th class="center">Cap.</th>
+      <th class="center">Spec.</th>
+      <th class="center">Result</th>
+      <th class="left">Receipt</th>
+      <th class="center">Envelope</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="left">Verb</td>
+      <td class="center">req</td>
+      <td class="center">req</td>
+      <td class="center">req.</td>
+      <td class="left">req.</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="left">Content Type</td>
+      <td class="center"/>
+      <td class="center"/>
+      <td class="center"/>
+      <td class="left"/>
+      <td class="center">req</td>
+    </tr>
+    <tr>
+      <td class="left">
+        <samp>version</samp>
+      </td>
+      <td class="center">req</td>
+      <td class="center">req</td>
+      <td class="center">req</td>
+      <td class="left">req</td>
+      <td class="center">req</td>
+    </tr>
+    <tr>
+      <td class="left">
+        <samp>registry</samp>
+      </td>
+      <td class="center">req</td>
+      <td class="center">req</td>
+      <td class="center">req</td>
+      <td class="left">opt</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="left">
+        <samp>label</samp>
+      </td>
+      <td class="center">opt</td>
+      <td class="center">opt</td>
+      <td class="center">opt</td>
+      <td class="left">opt</td>
+      <td class="center">opt</td>
+    </tr>
+    <tr>
+      <td class="left">
+        <samp>when</samp>
+      </td>
+      <td class="center">req</td>
+      <td class="center">req</td>
+      <td class="center">req</td>
+      <td class="left">req</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="left">
+        <samp>parameters</samp>
+      </td>
+      <td class="center">req/tok</td>
+      <td class="center">req</td>
+      <td class="center">req</td>
+      <td class="left">opt/tok</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="left">
+        <samp>metadata</samp>
+      </td>
+      <td class="center">opt/tok</td>
+      <td class="center">opt</td>
+      <td class="center">opt</td>
+      <td class="left">opt/tok</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="left">
+        <samp>results</samp>
+      </td>
+      <td class="center">req/tok</td>
+      <td class="center">req</td>
+      <td class="center">req</td>
+      <td class="left">opt/tok</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="left">
+        <samp>resultvalues</samp>
+      </td>
+      <td class="center"/>
+      <td class="center"/>
+      <td class="center">req</td>
+      <td class="left"/>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="left">
+        <samp>export</samp>
+      </td>
+      <td class="center">opt</td>
+      <td class="center">opt</td>
+      <td class="center">opt</td>
+      <td class="left">opt</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="left">
+        <samp>link</samp>
+      </td>
+      <td class="center">opt</td>
+      <td class="center">opt</td>
+      <td class="center"/>
+      <td class="left"/>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="left">
+        <samp>token</samp>
+      </td>
+      <td class="center">opt</td>
+      <td class="center">opt</td>
+      <td class="center">opt</td>
+      <td class="left">opt</td>
+      <td class="center">opt</td>
+    </tr>
+    <tr>
+      <td class="left">
+        <samp>contents</samp>
+      </td>
+      <td class="center"/>
+      <td class="center"/>
+      <td class="center"/>
+      <td class="left"/>
+      <td class="center">req</td>
+    </tr>
+  </tbody>
+</table>
 <p id="rfc.section.4.3.p.2">Withdrawals take the same sections as capabilities; and redemptions and interrupts take the same sections as receipts. Exceptions are not shown in this table.</p>
 <h1 id="rfc.section.4.3.1"><a href="#rfc.section.4.3.1">4.3.1.</a> <a href="#message-type-and-verb" id="message-type-and-verb">Message Type and Verb</a></h1>
 <p id="rfc.section.4.3.1.p.1">The verb is the action to be performed by the component. The following verbs are supported by the base mPlane protocol, but arbitrary verbs may be specified by applications:</p>
@@ -1100,7 +1260,7 @@ iso8601 = &lt;n&gt; '-' &lt;n&gt; '-' &lt;n&gt; [' ' &lt;n&gt; ':' &lt;n&gt; ':'
   "registry":   "https://example.com/mplane/registry/core",
   "label":      "ping-aggregate-query",
   "when":       "past ... future",
-  "link":       "wss://res.example.com:4343/",
+  "link":       "wss://repo.example.com:4343/",
   "parameters": {"source.ip4":      "*",
                  "destination.ip4": "*"},
   "results":    ["delay.twoway.icmp.us.min",
@@ -1112,7 +1272,61 @@ iso8601 = &lt;n&gt; '-' &lt;n&gt; '-' &lt;n&gt; [' ' &lt;n&gt; ':' &lt;n&gt; ':'
 </pre>
 <p id="rfc.section.5.1.2.p.11">The examples in this section use the following registry:</p>
 <pre>
-[TODO]
+   { "registry-format": "mplane-0",
+     "registry-uri", "https://example.com/mplane/registry/core",
+     "registry-revision": 0,
+     "includes": [],
+     "elements": [
+         { "name": "time",
+           "prim": "time",
+           "desc": "Time at which a single observation was taken"
+         },
+         { "name": "source.ip4",
+           "prim": "address",
+           "desc": "Source (or probe) IPv4 address"
+         },
+         { "name": "destination.ip4",
+           "prim": "address",
+           "desc": "Destination (or target) IPv4 address"
+         },
+         { "name": "intermediate.ip4",
+           "prim": "address",
+           "desc": "IPv4 address of intermediate node on a path"
+         },
+         { "name": "hops.ip",
+           "prim": "natural",
+           "desc": "IP-layer hops to identified node"
+         },
+         { "name": "hops.ip.max",
+           "prim": "natural",
+           "desc": "Maximum number of IP-layer hops to measure"
+         },
+         { "name": "delay.twoway.icmp.us",
+           "prim": "natural",
+           "desc": "Singleton two-way delay as measured via ICMP Echo"
+         },
+         { "name": "delay.twoway.icmp.us.min",
+           "prim": "natural",
+           "desc": "Minimum two-way delay as measured via ICMP Echo"
+         },
+         { "name": "delay.twoway.icmp.us.50pct",
+           "prim": "natural",
+           "desc": "Median two-way delay as measured via ICMP Echo"
+         },
+         { "name": "delay.twoway.icmp.us.mean",
+           "prim": "natural",
+           "desc": "Mean two-way delay as measured via ICMP Echo"
+         },
+         { "name": "delay.twoway.icmp.us.max",
+           "prim": "natural",
+           "desc": "Maximum two-way delay as measured via ICMP Echo"
+         },
+         { "name": "delay.twoway.icmp.us.count",
+           "prim": "natural",
+           "desc": "Count of two-way delay samples ... "
+         },
+     ]
+   }
 </pre>
 <h1 id="rfc.section.5.2"><a href="#rfc.section.5.2">5.2.</a> <a href="#mplane-over-websockets-over-tls" id="mplane-over-websockets-over-tls">mPlane over WebSockets over TLS</a></h1>
 <p id="rfc.section.5.2.p.1">The default session protocol for mPlane is WebSockets <a href="#RFC6455">[RFC6455]</a>. Once a WebSockets handshake between client and component is complete, messages are simply exchanged as outlined in <a href="#message-types">Section 4.2</a> as JSON objects in WebSockets text frames over the channel.</p>

@@ -1,7 +1,7 @@
 ---
 title: mPlane Protocol Specification
 abbrev: mPlane Protocol
-docname: draft-trammell-mplane-protocol-01
+docname: draft-trammell-mplane-protocol-latest
 date: 2016-3-18
 category: info
 ipr: trust200902
@@ -81,19 +81,19 @@ This revision of the document describes Version 2 of the mPlane protocol.
 
 ## Changes from Revision -00 (Protocol version 1)
 
-- WebSockets has been added as a session protocol for the mPlane protocol.
+- WebSockets has been added as a session protocol for the mPlane protocol. Message flow has been modified to git 
 - Redemptions have been expanded to allow temporally-scoped partial redemption of long-running measurements.
 - The "object" primitive type has been added to allow structured objects to be represented directly in mPlane messages using the underlying representation.
-- A number of obsolete features have been deprecated, and removed from the protcol description:
-  - The Indirection message type, as the same functionality is available for all message types using the link section.
+- A number of obsolete features have been deprecated based on implementation and pilot deployment experience, and removed from the protocol description:
   - HTTPS as a session protocol, as it is a poor fit for mPlane's exchanges
   - Callback control, as it is no longer needed without the limitations of HTTPS as a session protocol
+  - The Indirection message type, as the same functionality is available for all message types using the link section.
   - Repeating measurements, as their functionality has been replaced by partial redemption
-- References to the "core" registry have been removed, as all element registries must in any case be explicitly defined in mPlane capabilities, specifications, and results. An eventual proposed standard mPlane protocol, if such is ever proposed, would refer to an IANA-managed core registry.
+- References to the "core" registry have been removed, as all element registries must in any case be explicitly defined in mPlane capabilities, specifications, and results. An eventual proposed standard mPlane protocol would refer to an IANA-managed core registry.
 
 # Terminology
 
-[EDITOR'S NOTE: these terms are not capitalized within the document at this time. Fix this.]
+[EDITOR'S NOTE: these terms are not necessarily capitalized within the document at this time. Fix this.]
 
 Client:
 : An entity which implements the mPlane protocol, receives capabilities published by one or more components, and sends specifications to those component(s) to perform measurements and analysis. See {{components-and-clients}}.
@@ -281,9 +281,34 @@ For exploratory analysis of large amounts of data at a repository, it is presume
 
 The basic messages in the mPlane protocol are capabilities, specifications, and results, as described above. The full protocol contains other message types as well. Withdrawals cancel capabilities (i.e., indicate that the component is no longer capable or willing to perform a given measurement) and interrupts cancel specifications (i.e., indicate that the component should stop performing the measurement). Receipts can be given in lieu of results for not-yet completed measurements or queries, and redemptions can be used to retrieve results referred to by a receipt. Exceptions can be sent by clients or components at any time to signal protocol-level errors to their peers.
 
-<!-- ![Potential sequences of messages in the mPlane protocol](./message-paths.png) -->
+The following sequences of messages are possible within the mPlane protocol:
 
-In the nominal sequence, a capability leads to a specification leads to a result, where results may be transmitted by some other protocol. All the paths through the sequence of messages are shown in the diagram below; message types are described in detail in {{message-types}}. In the diagram, solid lines mean a message is sent in reply to the previous message in sequence (i.e. a component sends a capability, and a client replies or follows with a specification), and dashed lines mean a message is sent as a followup (i.e., a component sends a capability, then sends a withdrawal to cancel that capability). Messages at the top of the diagram are sent by components, at the bottom by clients.
+~~~~~~~~~~
+Client                 Component
+  |<---------- Capability -|   ( direct response )
+  |- Specification ------->|
+  |<-------------- Result -|
+  |                        |
+  |<---------- Capability -|   ( delayed response )
+  |- Specification ------->|
+  |<------------- Receipt -|
+  |         . . .          |
+  |- (Redemption) -------->|
+  |<-------------- Result -|
+  |                        |
+  |<---------- Capability -|   ( indirect export )
+  |- Specification ------->|
+  |<------------- Receipt -|
+  |.... indirect export ...|
+  |- (Interrupt) --------->|
+  |                        |
+  |<---------- Capability -|   ( eventual withdrawal )
+  |         . . .          |
+  |<---------- Withdrawal -|
+~~~~~~~~~~
+{: #sequence title="Possible sequences of messages in the mPlane protocol"} 
+
+In the nominal sequence, a capability leads to a specification leads to a result, where results may be transmitted by some other protocol. All the paths through the sequence of messages are shown in the diagram above; message types are described in detail in {{message-types}}. 
 
 Separate from the sequence of messages, the mPlane protocol supports two connection establishment patterns:
 
@@ -448,7 +473,7 @@ the token is an opaque string generated by the component.
 A redemption is sent from a client to a component for a previously received
 receipt to attempt to retrieve delayed results. It may contain only the token
 section, the token and temporal scope, or all sections of the received
-receipt.
+receipt. 
 
 When the temporal scope of a redemption for a running measurement is different
 than the temporal scope of the original specification, it is treated by the
@@ -457,13 +482,29 @@ within the specified temporal scope are returned as a result. Otherwise, a
 component responds with a result only when the measurement is complete;
 otherwise, another receipt is returned.
 
+Note that redemptions are optional: when a component has a result available
+for a client after some period of time, it may send it immediately, without
+waiting for a redemption to retrieve it.
+
 ### Exception
 
-An exception is sent from a client to a component or from a component to a client to signal an exceptional condition within the infrastructure itself. They are not meant to signal exceptional conditions within a measurement performed by a component; see {{error-handling-in-mplane-workflows}} for more. An exception contains only two sections: an optional token referring back to the message to which the exception is related (if any), and a message section containing free-form, preferably human readable information about the exception.
+An exception is sent from a client to a component or from a component to a
+client to signal an exceptional condition within the infrastructure itself.
+They are not meant to signal exceptional conditions within a measurement
+performed by a component; see {{error-handling-in-mplane-workflows}} for more.
+An exception contains only two sections: an optional token referring back to
+the message to which the exception is related (if any), and a message section
+containing free-form, preferably human readable information about the
+exception.
 
 ### Envelope
 
-An envelope is used to contain other messages. Message containment is necessary in contexts in which multiple mPlane messages must be grouped into a single transaction in the underlying session protocol. It is legal to group any kind of message, and to mix messages of different types, in an envelope. However, in the current revision of the protocol, envelopes are primarily intended to be used for three distinct purposes:
+An envelope is used to contain other messages. Message containment is
+necessary in contexts in which multiple mPlane messages must be grouped into a
+single transaction in the underlying session protocol. It is legal to group
+any kind of message, and to mix messages of different types, in an envelope.
+However, in the current revision of the protocol, envelopes are primarily
+intended to be used for three distinct purposes:
 
 - To group multiple capabilities together within a single message (e.g., all the capabilities a given component has).
 - To return multiple results for a single receipt or specification.
@@ -471,26 +512,24 @@ An envelope is used to contain other messages. Message containment is necessary 
 
 ## Message Sections
 
-Each message is made up of sections, as described in the subsection below. The following table shows the presence of each of these sections in each of the message types supported by mPlane: "req." means the section is required, "opt." means it is optional; see the subsection on each message section for details.
+Each message is made up of sections, as described in the subsection below. The following table shows the presence of each of these sections in each of the message types supported by mPlane: "req" means the section is required, "opt" means it is optional, and "tok" means it may be replaced by reference via a token when available (i.e., in withdrawals and redemptions); see the subsection on each message section for details.
 
-~~~~~~~~~~
-| Section        | Capability | Spec. | Result | Receipt    | Envelope |
-| -------------- | ---------- | ----- | ------ |------------|----------|
-| Verb           | req.       | req   | req.   | req.       |          |
-| Content Type   |            |       |        |            | req.     |
-| `version`      | req.       | req.  | req.   | req.       | req.     |
-| `registry`     | req.       | req.  | req.   | opt.       |          |
-| `label`        | opt.       | opt.  | opt.   | opt.       | opt.     |
-| `when`         | req.       | req.  | req.   | req.       |          |
-| `parameters`   | req./token | req.  | req.   | opt./token |          |
-| `metadata`     | opt./token | opt.  | opt.   | opt./token |          |
-| `results`      | req./token | req.  | req.   | opt./token |          |
-| `resultvalues` |            |       | req.   |            |          |
-| `export`       | opt.       | opt.  | opt.   | opt.       |          |
-| `link`         | opt.       | opt.  |        |            |          |
-| `token`        | opt.       | opt.  | opt.   | opt.       | opt.     |
-| `contents`     |            |       |        |            | req.     |
-~~~~~~~~~~
+| Section        | Cap.    | Spec. | Result | Receipt | Envelope |
+|:---------------|:-------:|:-----:|:------:|:--------|:--------:|
+| Verb           | req     | req   | req.   | req.    |          |
+| Content Type   |         |       |        |         | req      |
+| `version`      | req     | req   | req    | req     | req      |
+| `registry`     | req     | req   | req    | opt     |          |
+| `label`        | opt     | opt   | opt    | opt     | opt      |
+| `when`         | req     | req   | req    | req     |          |
+| `parameters`   | req/tok | req   | req    | opt/tok |          |
+| `metadata`     | opt/tok | opt   | opt    | opt/tok |          |
+| `results`      | req/tok | req   | req    | opt/tok |          |
+| `resultvalues` |         |       | req    |         |          |
+| `export`       | opt     | opt   | opt    | opt     |          |
+| `link`         | opt     | opt   |        |         |          |
+| `token`        | opt     | opt   | opt    | opt     | opt      |
+| `contents`     |         |       |        |         | req      |
 {: #table-messages title="Message Sections for Each Message Type"}
 
 Withdrawals take the same sections as capabilities; and redemptions
@@ -933,7 +972,7 @@ which differs only from the previous probe capability in that it states that res
   "registry":   "https://example.com/mplane/registry/core",
   "label":      "ping-aggregate-query",
   "when":       "past ... future",
-  "link":       "wss://res.example.com:4343/",
+  "link":       "wss://repo.example.com:4343/",
   "parameters": {"source.ip4":      "*",
                  "destination.ip4": "*"},
   "results":    ["delay.twoway.icmp.us.min",
@@ -947,7 +986,61 @@ which differs only from the previous probe capability in that it states that res
 The examples in this section use the following registry:
 
 ~~~~~~~~~~
-[TODO]
+   { "registry-format": "mplane-0",
+     "registry-uri", "https://example.com/mplane/registry/core",
+     "registry-revision": 0,
+     "includes": [],
+     "elements": [
+         { "name": "time",
+           "prim": "time",
+           "desc": "Time at which a single observation was taken"
+         },
+         { "name": "source.ip4",
+           "prim": "address",
+           "desc": "Source (or probe) IPv4 address"
+         },
+         { "name": "destination.ip4",
+           "prim": "address",
+           "desc": "Destination (or target) IPv4 address"
+         },
+         { "name": "intermediate.ip4",
+           "prim": "address",
+           "desc": "IPv4 address of intermediate node on a path"
+         },
+         { "name": "hops.ip",
+           "prim": "natural",
+           "desc": "IP-layer hops to identified node"
+         },
+         { "name": "hops.ip.max",
+           "prim": "natural",
+           "desc": "Maximum number of IP-layer hops to measure"
+         },
+         { "name": "delay.twoway.icmp.us",
+           "prim": "natural",
+           "desc": "Singleton two-way delay as measured via ICMP Echo"
+         },
+         { "name": "delay.twoway.icmp.us.min",
+           "prim": "natural",
+           "desc": "Minimum two-way delay as measured via ICMP Echo"
+         },
+         { "name": "delay.twoway.icmp.us.50pct",
+           "prim": "natural",
+           "desc": "Median two-way delay as measured via ICMP Echo"
+         },
+         { "name": "delay.twoway.icmp.us.mean",
+           "prim": "natural",
+           "desc": "Mean two-way delay as measured via ICMP Echo"
+         },
+         { "name": "delay.twoway.icmp.us.max",
+           "prim": "natural",
+           "desc": "Maximum two-way delay as measured via ICMP Echo"
+         },
+         { "name": "delay.twoway.icmp.us.count",
+           "prim": "natural",
+           "desc": "Count of two-way delay samples ... "
+         },
+     ]
+   }
 ~~~~~~~~~~
 
 ## mPlane over WebSockets over TLS

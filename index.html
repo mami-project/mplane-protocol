@@ -270,6 +270,7 @@ li, p {
   <link href="#rfc.toc" rel="Contents"/>
 <link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
 <link href="#rfc.section.1.1" rel="Chapter" title="1.1 Changes from Revision -00 (Protocol version 1)"/>
+<link href="#rfc.section.1.2" rel="Chapter" title="1.2 Changes from Revision -01"/>
 <link href="#rfc.section.2" rel="Chapter" title="2 Terminology"/>
 <link href="#rfc.section.3" rel="Chapter" title="3 Overview of the mPlane Architecture"/>
 <link href="#rfc.section.3.1" rel="Chapter" title="3.1 Key Architectural Principles and Features"/>
@@ -280,8 +281,6 @@ li, p {
 <link href="#rfc.section.3.2" rel="Chapter" title="3.2 Entities and Relationships"/>
 <link href="#rfc.section.3.2.1" rel="Chapter" title="3.2.1 Components and Clients"/>
 <link href="#rfc.section.3.2.2" rel="Chapter" title="3.2.2 Probes and Repositories"/>
-<link href="#rfc.section.3.2.3" rel="Chapter" title="3.2.3 Supervisors and Federation"/>
-<link href="#rfc.section.3.2.4" rel="Chapter" title="3.2.4 External Interfaces to mPlane Entities"/>
 <link href="#rfc.section.3.3" rel="Chapter" title="3.3 Message Types and Message Exchange Sequences"/>
 <link href="#rfc.section.3.4" rel="Chapter" title="3.4 Integrating Measurement Tools into mPlane"/>
 <link href="#rfc.section.3.5" rel="Chapter" title="3.5 From Architecture to Protocol Specification"/>
@@ -323,7 +322,7 @@ li, p {
 <link href="#rfc.section.5.2.2" rel="Chapter" title="5.2.2 Capability Advertisement for WebSockets"/>
 <link href="#rfc.section.5.2.3" rel="Chapter" title="5.2.3 mPlane Link and Export URLs for WebSockets"/>
 <link href="#rfc.section.6" rel="Chapter" title="6 Deployment Considerations"/>
-<link href="#rfc.section.6.1" rel="Chapter" title="6.1 The Role of the Supervisor"/>
+<link href="#rfc.section.6.1" rel="Chapter" title="6.1 Supervisors and Federation"/>
 <link href="#rfc.section.6.1.1" rel="Chapter" title="6.1.1 Component Registration"/>
 <link href="#rfc.section.6.1.2" rel="Chapter" title="6.1.2 Client Authentication"/>
 <link href="#rfc.section.6.1.3" rel="Chapter" title="6.1.3 Capability Composition and Specification Decomposition"/>
@@ -341,10 +340,10 @@ li, p {
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Trammell, B., Ed. and M. Kuehlewind, Ed." />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-trammell-mplane-protocol-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2016-3-18" />
-  <meta name="dct.abstract" content="This document defines the mPlane architecture for coordination of heterogeneous network measurement components: probes and repositories that measure, analyze, and store network measurements, data derived from measurements, and other ancillary data about elements of the network. The architecture is defined in terms of relationships between components and clients which communicate using the mPlane protocol defined in this document." />
-  <meta name="description" content="This document defines the mPlane architecture for coordination of heterogeneous network measurement components: probes and repositories that measure, analyze, and store network measurements, data derived from measurements, and other ancillary data about elements of the network. The architecture is defined in terms of relationships between components and clients which communicate using the mPlane protocol defined in this document." />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-trammell-mplane-protocol-02" />
+  <meta name="dct.issued" scheme="ISO8601" content="2016-10-27" />
+  <meta name="dct.abstract" content="This document defines the mPlane protocol for coordination of heterogeneous network measurement Components: probes and repositories that measure, analyze, and store network measurements, data derived from measurements, and other ancillary data about elements of the network. The mPlane architecture is defined in terms of relationships between Components and Clients which communicate using the mPlane protocol defined in this document." />
+  <meta name="description" content="This document defines the mPlane protocol for coordination of heterogeneous network measurement Components: probes and repositories that measure, analyze, and store network measurements, data derived from measurements, and other ancillary data about elements of the network. The mPlane architecture is defined in terms of relationships between Components and Clients which communicate using the mPlane protocol defined in this document." />
 
 </head>
 
@@ -366,8 +365,8 @@ li, p {
   <td class="right">ETH Zurich</td>
 </tr>
 <tr>
-  <td class="left">Expires: September 19, 2016</td>
-  <td class="right">March 18, 2016</td>
+  <td class="left">Expires: April 30, 2017</td>
+  <td class="right">October 27, 2016</td>
 </tr>
 
     	
@@ -375,12 +374,12 @@ li, p {
   </table>
 
   <p class="title">mPlane Protocol Specification<br />
-  <span class="filename">draft-trammell-mplane-protocol-latest</span></p>
+  <span class="filename">draft-trammell-mplane-protocol-02</span></p>
   
   <h1 id="rfc.abstract">
   <a href="#rfc.abstract">Abstract</a>
 </h1>
-<p>This document defines the mPlane architecture for coordination of heterogeneous network measurement components: probes and repositories that measure, analyze, and store network measurements, data derived from measurements, and other ancillary data about elements of the network. The architecture is defined in terms of relationships between components and clients which communicate using the mPlane protocol defined in this document.</p>
+<p>This document defines the mPlane protocol for coordination of heterogeneous network measurement Components: probes and repositories that measure, analyze, and store network measurements, data derived from measurements, and other ancillary data about elements of the network. The mPlane architecture is defined in terms of relationships between Components and Clients which communicate using the mPlane protocol defined in this document.</p>
 <p>This revision of the document describes Version 2 of the mPlane protocol.</p>
 <h1 id="rfc.status">
   <a href="#rfc.status">Status of This Memo</a>
@@ -388,7 +387,7 @@ li, p {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on September 19, 2016.</p>
+<p>This Internet-Draft will expire on April 30, 2017.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -402,6 +401,7 @@ li, p {
 
   	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
 <ul><li>1.1.   <a href="#rfc.section.1.1">Changes from Revision -00 (Protocol version 1)</a></li>
+<li>1.2.   <a href="#rfc.section.1.2">Changes from Revision -01</a></li>
 </ul><li>2.   <a href="#rfc.section.2">Terminology</a></li>
 <li>3.   <a href="#rfc.section.3">Overview of the mPlane Architecture</a></li>
 <ul><li>3.1.   <a href="#rfc.section.3.1">Key Architectural Principles and Features</a></li>
@@ -412,8 +412,6 @@ li, p {
 </ul><li>3.2.   <a href="#rfc.section.3.2">Entities and Relationships</a></li>
 <ul><li>3.2.1.   <a href="#rfc.section.3.2.1">Components and Clients</a></li>
 <li>3.2.2.   <a href="#rfc.section.3.2.2">Probes and Repositories</a></li>
-<li>3.2.3.   <a href="#rfc.section.3.2.3">Supervisors and Federation</a></li>
-<li>3.2.4.   <a href="#rfc.section.3.2.4">External Interfaces to mPlane Entities</a></li>
 </ul><li>3.3.   <a href="#rfc.section.3.3">Message Types and Message Exchange Sequences</a></li>
 <li>3.4.   <a href="#rfc.section.3.4">Integrating Measurement Tools into mPlane</a></li>
 <li>3.5.   <a href="#rfc.section.3.5">From Architecture to Protocol Specification</a></li>
@@ -455,7 +453,7 @@ li, p {
 <li>5.2.2.   <a href="#rfc.section.5.2.2">Capability Advertisement for WebSockets</a></li>
 <li>5.2.3.   <a href="#rfc.section.5.2.3">mPlane Link and Export URLs for WebSockets</a></li>
 </ul></ul><li>6.   <a href="#rfc.section.6">Deployment Considerations</a></li>
-<ul><li>6.1.   <a href="#rfc.section.6.1">The Role of the Supervisor</a></li>
+<ul><li>6.1.   <a href="#rfc.section.6.1">Supervisors and Federation</a></li>
 <ul><li>6.1.1.   <a href="#rfc.section.6.1.1">Component Registration</a></li>
 <li>6.1.2.   <a href="#rfc.section.6.1.2">Client Authentication</a></li>
 <li>6.1.3.   <a href="#rfc.section.6.1.3">Capability Composition and Specification Decomposition</a></li>
@@ -479,11 +477,17 @@ li, p {
 <p/>
 
 <ul>
-  <li>WebSockets has been added as a session protocol for the mPlane protocol. Message flow has been modified to git</li>
+  <li>WebSockets has been added as a session protocol for the mPlane protocol. Message flow has been modified to fit.</li>
   <li>Redemptions have been expanded to allow temporally-scoped partial redemption of long-running measurements.</li>
   <li>The &#8220;object&#8221; primitive type has been added to allow structured objects to be represented directly in mPlane messages using the underlying representation.</li>
   <li>A number of obsolete features have been deprecated based on implementation and pilot deployment experience, and removed from the protocol description: <ul><li>HTTPS as a session protocol, as it is a poor fit for mPlane&#8217;s exchanges</li><li>Callback control, as it is no longer needed without the limitations of HTTPS as a session protocol</li><li>The Indirection message type, as the same functionality is available for all message types using the link section.</li><li>Repeating measurements, as their functionality has been replaced by partial redemption</li></ul></li>
-  <li>References to the &#8220;core&#8221; registry have been removed, as all element registries must in any case be explicitly defined in mPlane capabilities, specifications, and results. An eventual proposed standard mPlane protocol would refer to an IANA-managed core registry.</li>
+  <li>References to the &#8220;core&#8221; registry have been removed, as all element registries must in any case be explicitly defined in mPlane Capabilities, Specifications, and Results. An eventual proposed standard mPlane protocol would refer to an IANA-managed core registry.</li>
+</ul>
+<h1 id="rfc.section.1.2"><a href="#rfc.section.1.2">1.2.</a> <a href="#changes-from-revision-01" id="changes-from-revision-01">Changes from Revision -01</a></h1>
+<p/>
+
+<ul>
+  <li>Editorial changes only.</li>
 </ul>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#terminology" id="terminology">Terminology</a></h1>
 <p id="rfc.section.2.p.1">[EDITOR&#8217;S NOTE: these terms are not necessarily capitalized within the document at this time. Fix this.]</p>
@@ -491,133 +495,68 @@ li, p {
 
 <dl>
   <dt>Client:</dt>
-  <dd style="margin-left: 8">An entity which implements the mPlane protocol, receives capabilities published by one or more components, and sends specifications to those component(s) to perform measurements and analysis. See <a href="#components-and-clients">Section 3.2.1</a>.</dd>
+  <dd style="margin-left: 8">An entity which implements the mPlane protocol, receives Capabilities published by one or more Components, and sends Specifications to those Component(s) to perform measurements and analysis. See <a href="#components-and-clients">Section 3.2.1</a>.</dd>
   <dt>Component:</dt>
-  <dd style="margin-left: 8">An entity which implements the mPlane protocol specified within this document, advertises its capabilities and accepts specifications which request the use of those capabilities. The measurements, analyses, storage facilities and other services provided by a component are completely defined by its capabilities. See <a href="#components-and-clients">Section 3.2.1</a>.</dd>
+  <dd style="margin-left: 8">An entity which implements the mPlane protocol specified within this document, advertises its Capabilities and accepts Specifications which request the use of those Capabilities. The measurements, analyses, storage facilities and other services provided by a Component are completely defined by its Capabilities. See <a href="#components-and-clients">Section 3.2.1</a>.</dd>
   <dt>mPlane Message:</dt>
-  <dd style="margin-left: 8">The atomic unit of exchange in the mPlane protocol. The treatment of a message at a client or component receiving it is based upon its type; see <a href="#message-types">Section 4.2</a>.</dd>
+  <dd style="margin-left: 8">The atomic unit of exchange in the mPlane protocol. The treatment of a message at a Client or Component receiving it is based upon its type; see <a href="#message-types">Section 4.2</a>.</dd>
   <dt>Capability:</dt>
-  <dd style="margin-left: 8">An mPlane message that contains a statement of a component&#8217;s ability and willingness to perform a specific operation, conveyed from a component to a client. A capability does not represent a guarantee that the specific operation can or will be performed at a specific point in time. See <a href="#capability-and-withdrawal">Section 4.2.1</a></dd>
+  <dd style="margin-left: 8">An mPlane message that contains a statement of a Component&#8217;s ability and willingness to perform a specific operation, conveyed from a Component to a Client. A Capability does not represent a guarantee that the specific operation can or will be performed at a specific point in time. See <a href="#capability-and-withdrawal">Section 4.2.1</a></dd>
   <dt>Specification:</dt>
-  <dd style="margin-left: 8">An mPlane message that contains a statement of a client&#8217;s desire that a component should perform a specific operation, conveyed from a client to a component. It can be conceptually viewed as a capability whose parameters have been filled in with values. See <a href="#specification-and-interrupt">Section 4.2.2</a>.</dd>
+  <dd style="margin-left: 8">An mPlane message that contains a statement of a Client&#8217;s desire that a Component should perform a specific operation, conveyed from a Client to a Component. It can be conceptually viewed as a Capability whose parameters have been filled in with values. See <a href="#specification-and-interrupt">Section 4.2.2</a>.</dd>
   <dt>Result:</dt>
-  <dd style="margin-left: 8">An mPlane message containing a statement produced by a component that a particular measurement was taken and the given values were observed, or that a particular operation or analysis was performed and a the given values were produced. It can be conceptually viewed as a specification whose result columns have been filled in with values. See <a href="#result">Section 4.2.3</a>.</dd>
+  <dd style="margin-left: 8">An mPlane message containing a statement produced by a Component that a particular measurement was taken and the given values were observed, or that a particular operation or analysis was performed and a the given values were produced. It can be conceptually viewed as a Specification whose result columns have been filled in with values. See <a href="#result">Section 4.2.3</a>.</dd>
   <dt>Element:</dt>
-  <dd style="margin-left: 8">An identifier for a parameter or result column in a capability, specification, or result, binding a name to a primitive type. Elements are contained in registries that contain the vocabulary from which mPlane capabilities, specifications, and results can be built. See <a href="#element-registry">Section 4.1</a>.</dd>
+  <dd style="margin-left: 8">An identifier for a parameter or result column in a Capability, Specification, or Result, binding a name to a primitive type. Elements are contained in registries that contain the vocabulary from which mPlane Capabilities, Specifications, and Results can be built. See <a href="#element-registry">Section 4.1</a>.</dd>
 </dl>
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#overview-of-the-mplane-architecture" id="overview-of-the-mplane-architecture">Overview of the mPlane Architecture</a></h1>
-<p id="rfc.section.3.p.1">mPlane is built around an architecture in which components provide network measurement services and access to stored measurement data which they advertise via capabilities completely describing these services and data. A client makes use of these capabilities by sending specifications that respond to them back to the components. Components may then either return results directly to the clients or sent to some third party via indirect export using an external protocol. The capabilities, specifications, and results are carried over the mPlane protocol, defined in detail in this document. An mPlane measurement infrastructure is built up from these basic blocks.</p>
-<p id="rfc.section.3.p.2">Components can be roughly classified into probes which generate measurement data and repositories which store and analyze measurement data, though the difference between a probe and a repository in the architecture is merely a matter of the capabilities it provides. Components can be pulled together into an infrastructure by a supervisor, which presents a client interface to subordinate components and a component interface to superordinate clients, aggregating capabilities into higher-level measurements and distributing specifications to perform them.</p>
-<p id="rfc.section.3.p.3">This arrangement is shown in schematic form in the diagram below.</p>
+<p id="rfc.section.3.p.1">mPlane is built around an architecture in which Components provide network measurement services and access to stored measurement data which they advertise via Capabilities completely describing these services and data. A Client makes use of these Capabilities by sending Specifications that respond to them back to the Components. Components may then either return Results directly to the Clients or sent to some third party via indirect export using an external protocol. The Capabilities, Specifications, and Results are carried over the mPlane protocol, defined in detail in this document. An mPlane measurement infrastructure is built up from these basic blocks.</p>
+<p id="rfc.section.3.p.2">Components can be roughly classified into probes which generate measurement data and repositories which store and analyze measurement data, though the difference between a probe and a repository in the architecture is merely a matter of the Capabilities it provides. Components can be pulled together into an infrastructure by a supervisor (see <a href="#supervisors-and-federation">Section 6.1</a>), which presents a Client interface to subordinate Components and a Component interface to superordinate Clients, aggregating Capabilities into higher-level measurements and distributing Specifications to perform them.</p>
+<p id="rfc.section.3.p.3">The mPlane protocol is, in essence, a self-describing, error- and delay- tolerant remote procedure call (RPC) protocol between Clients and Components: each Capability exposes an entry point in the API provided by the Component; each Specification embodies an API call; and each Result returns the results of an API call. This arrangement is shown in <a href="#simple">Figure 1</a> below.</p>
 <div id="rfc.figure.1"/>
-<div id="overview"/>
+<div id="simple"/>
 <pre>
-             __________
-            /           \
-            |   Client  |
-            \           /
-             -----------
-                  ^
-                  | specification/capability/result
-                  v
-          ------------------
-          |                |
-          |   Supervisor   |
-          |                |
-          ------------------
-                  ^
-                  | specification/capability/result
-                  |
-        ---------------------
-       |                     |
-       v                     v
-  /---------\ indirect \____________/
- &lt; component &gt;--------&gt;| repository |
-  \_________/  export  \____________/
+          +=================================+
+          |                                 |
+      +--&gt;|            Client               |
+      |   |                                 |&lt;-+
+      |   +=================================+  |
+      |          n |          |                |
+ Capability        |    Specification       Result
+      |            | m        V                |
+      |   +=================================+  |
+      |   |                                 |--+
+      +---|            Component            |
+          |                                 |
+          +=================================+
 </pre>
-<p class="figure">Figure 1: General arrangement of entities in the mPlane architecture</p>
-<p id="rfc.section.3.p.4">The mPlane protocol is, in essence, a self-describing, error- and delay-tolerant remote procedure call (RPC) protocol: each capability exposes an entry point in the API provided by the component; each specification embodies an API call; and each result returns the results of an API call.</p>
+<p class="figure">Figure 1: The simplest form of the mPlane architecture</p>
 <h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#key-architectural-principles-and-features" id="key-architectural-principles-and-features">Key Architectural Principles and Features</a></h1>
 <p id="rfc.section.3.1.p.1">mPlane differs from a simple RPC facility in several important ways, detailed in the subsections below.</p>
 <h1 id="rfc.section.3.1.1"><a href="#rfc.section.3.1.1">3.1.1.</a> <a href="#flexibility-and-extensibility" id="flexibility-and-extensibility">Flexibility and Extensibility</a></h1>
-<p id="rfc.section.3.1.1.p.1">First, given the heterogeneity of the measurement tools and techniques applied, it is necessary for the protocol to be as flexible and extensible as possible. Therefore, the architecture in its simplest form consists of only two entities and one relationship, as shown in the diagram below: n clients connect to m components via the mPlane protocol. Anything which can speak the mPlane protocol and exposes capabilities thereby is a component; anything which can understand these capabilities and send specifications to invoke them is a client. Everything a component can do, from the point of view of mPlane, is entirely described by its capabilities. Capabilities are even used to expose optional internal features of the protocol itself, and provide a method for built-in protocol extensibility.</p>
+<p id="rfc.section.3.1.1.p.1">First, given the heterogeneity of the measurement tools and techniques applied, it is necessary for the protocol to be as flexible and extensible as possible. Therefore, the architecture in its simplest form consists of only two entities and one relationship, as shown in the diagram below: n Clients connect to m Components via the mPlane protocol. Anything which can speak the mPlane protocol and exposes Capabilities thereby is a Component; anything which can understand these Capabilities and send Specifications to invoke them is a Client. Everything a Component can do, from the point of view of mPlane, is entirely described by its Capabilities. Capabilities are even used to expose optional internal features of the protocol itself, and provide a method for built-in protocol extensibility.</p>
 <h1 id="rfc.section.3.1.2"><a href="#rfc.section.3.1.2">3.1.2.</a> <a href="#schema-centric-measurement-definition" id="schema-centric-measurement-definition">Schema-centric Measurement Definition</a></h1>
-<p id="rfc.section.3.1.2.p.1">Second, given the flexibility required above, the key to measurement interoperability is the comparison of data types. Each capability, specification, and result contains a schema, comprising the set of parameters required to execute a measurement or query and the columns in the data set that results. From the point of view of mPlane, the schema completely describes the measurement. This implies that when exposing a measurement using mPlane, the developer of a component must build each capabilities it advertises such that the semantics of the measurement are captured by the set of columns in its schema. The elements from which schemas can be built are captured in a type registry. The mPlane platform provides a core registry for common measurement use cases within the project, and the registry facility is itself fully extensible as well, for supporting new applications without requiring central coordination beyond the domain or set of domains running the application.</p>
+<p id="rfc.section.3.1.2.p.1">Second, given the flexibility required above, the key to measurement interoperability is the comparison of data types. Each Capability, Specification, and Result contains a schema, comprising the set of parameters required to execute a measurement or query and the columns in the data set that results. From the point of view of mPlane, the schema completely describes the measurement. This implies that when exposing a measurement using mPlane, the developer of a Component must build each Capabilities it advertises such that the semantics of the measurement are captured by the set of columns in its schema. The elements from which schemas can be built are captured in a type registry. The mPlane platform provides a core registry for common measurement use cases within the project, and the registry facility is itself fully extensible as well, for supporting new applications without requiring central coordination beyond the domain or set of domains running the application.</p>
 <h1 id="rfc.section.3.1.3"><a href="#rfc.section.3.1.3">3.1.3.</a> <a href="#iterative-measurement-support" id="iterative-measurement-support">Iterative Measurement Support</a></h1>
-<p id="rfc.section.3.1.3.p.1">Third, the exchange of messages in the protocol was chosen to support iterative measurement in which the aggregated, high-level results of a measurement are used as input to a decision process to select the next measurement. Specifically, the protocol blends control messages (capabilities and specifications) and data messages (results) into a single workflow.</p>
+<p id="rfc.section.3.1.3.p.1">Third, the exchange of messages in the protocol was chosen to support iterative measurement in which the aggregated, high-level results of a measurement are used as input to a decision process to select the next measurement. Specifically, the protocol blends control messages (Capabilities and Specifications) and data messages (Results) into a single workflow.</p>
 <h1 id="rfc.section.3.1.4"><a href="#rfc.section.3.1.4">3.1.4.</a> <a href="#weak-imperativeness" id="weak-imperativeness">Weak Imperativeness</a></h1>
-<p id="rfc.section.3.1.4.p.1">Fourth, the mPlane protocol is weakly imperative. A capability represents a willingness and an ability to perform a given measurement or execute a query, but not a guarantee or a reservation to do so. Likewise, a specification contains a set of parameters and a temporal scope for a measurement a client wishes a component to perform on its behalf, but execution of specifications is best-effort. A specification is not an instruction which must result either in data or in an error. This property arises from our requirement to support large-scale measurement infrastructures with thousands of similar components, including resource- and connectivity-limited probes such as smartphones and customer-premises equipment (CPE) like home routers. These may be connected to a supervisor only intermittently. In this environment, the operability and conditions in which the probes find themselves may change more rapidly than can be practicably synchronized with a central supervisor; requiring reliable operation would compromise scalability of the architecture.</p>
-<p id="rfc.section.3.1.4.p.2">To support weak imperativeness, each message in the mPlane protocol is self-contained, and contains all the information required to understand the message. For instance, a specification contains the complete information from the capability which it responds to, and a result contains its specification. In essence, this distributes the state of the measurements running in an infrastructure across all components, and any state resynchronization that is necessary after a disconnect happens implicitly as part of message exchange. The failure of a component during a large-scale measurement can be detected and corrected after the fact, by examining the totality of the generated data.</p>
-<p id="rfc.section.3.1.4.p.3">This distribution of state throughout the measurement infrastructure carries with it a distribution of responsibility: a component holding a specification is responsible for ensuring that the measurement or query that the specification describes is carried out, because the client or supervisor which has sent the specification does not necessarily keep any state for it.</p>
-<p id="rfc.section.3.1.4.p.4">Error handling in a weakly imperative environment is different to that in traditional RPC protocols. The exception facility provided by mPlane is designed only to report on failures of the handling of the protocol itself. Each component and client makes its best effort to interpret and process any authorized, well-formed mPlane protocol message it receives, ignoring those messages which are spurious or no longer relevant. This is in contrast with traditional RPC protocols, where even common exceptional conditions are signaled, and information about missing or otherwise defective data must be correlated from logs about measurement control. This traditional design pattern is not applicable in infrastructures where the supervisor has no control over the functionality and availability of its associated probes.</p>
+<p id="rfc.section.3.1.4.p.1">Fourth, the mPlane protocol is weakly imperative. A Capability represents a willingness and an ability to perform a given measurement or execute a query, but not a guarantee or a reservation to do so. Likewise, a Specification contains a set of parameters and a temporal scope for a measurement a Client wishes a Component to perform on its behalf, but execution of Specifications is best-effort. A Specification is not an instruction which must Result either in data or in an error. This property arises from our requirement to support large-scale measurement infrastructures with thousands of similar Components, including resource- and connectivity-limited probes such as smartphones and customer-premises equipment (CPE) like home routers. These may be connected to a supervisor only intermittently. In this environment, the operability and conditions in which the probes find themselves may change more rapidly than can be practicably synchronized with a central supervisor; requiring reliable operation would compromise scalability of the architecture.</p>
+<p id="rfc.section.3.1.4.p.2">To support weak imperativeness, each message in the mPlane protocol is self- contained, and contains all the information required to understand the message. For instance, a Specification contains the complete information from the Capability which it responds to, and a Result contains its Specification.  In essence, this distributes the state of the measurements running in an infrastructure across all Components, and any state resynchronization that is necessary after a disconnect happens implicitly as part of message exchange.  The failure of a Component during a large-scale measurement can be detected and corrected after the fact, by examining the totality of the generated data.</p>
+<p id="rfc.section.3.1.4.p.3">This distribution of state throughout the measurement infrastructure carries with it a distribution of responsibility: a Component holding a Specification is responsible for ensuring that the measurement or query that the Specification describes is carried out, because the Client or supervisor which has sent the Specification does not necessarily keep any state for it.</p>
+<p id="rfc.section.3.1.4.p.4">Error handling in a weakly imperative environment is different to that in traditional RPC protocols. The exception facility provided by mPlane is designed only to report on failures of the handling of the protocol itself.  Each Component and Client makes its best effort to interpret and process any authorized, well-formed mPlane protocol message it receives, ignoring those messages which are spurious or no longer relevant. This is in contrast with traditional RPC protocols, where even common exceptional conditions are signaled, and information about missing or otherwise defective data must be correlated from logs about measurement control. This traditional design pattern is not applicable in infrastructures where the supervisor has no control over the functionality and availability of its associated probes.</p>
 <h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#entities-and-relationships" id="entities-and-relationships">Entities and Relationships</a></h1>
 <p id="rfc.section.3.2.p.1">The entities in the mPlane protocol and the relationships among them are described in more detail in the subsections below.</p>
 <h1 id="rfc.section.3.2.1"><a href="#rfc.section.3.2.1">3.2.1.</a> <a href="#components-and-clients" id="components-and-clients">Components and Clients</a></h1>
-<p id="rfc.section.3.2.1.p.1">Specifically, a component is any entity which implements the mPlane protocol specified within this document, advertises its capabilities and accepts specifications which request the use of those capabilities. The measurements, analyses, storage facilities and other services provided by a component are completely defined by its capabilities.</p>
-<p id="rfc.section.3.2.1.p.2">Conversely, a client is any entity which implements the mPlane protocol, receives capabilities published by one or more components, and sends specifications to those component(s) to perform  measurements and analysis.</p>
-<p id="rfc.section.3.2.1.p.3">Every interaction in the mPlane protocol takes place between a component and a client. Indeed, the simplest instantiation of the mPlane architecture consists of one or more clients taking capabilities from one or more components, and sending specifications to invoke those capabilities, as shown in the diagram below. An mPlane domain may consist of as little as a single client and a single component. In this arrangement, mPlane provides a measurement-oriented RPC mechanism.</p>
-<div id="rfc.figure.2"/>
-<div id="simple"/>
-<pre>
-          ________________
-          |              |
-          |    client    |
-          |              |
-          ----------------
-            ^   n|     |
- capability |    |     | specification
-            |    |m    v
-          ________________
-          |              |
-          |  component   |
-          |              |
-          ----------------
-</pre>
-<p class="figure">Figure 2: The simplest form of the mPlane architecture</p>
+<p id="rfc.section.3.2.1.p.1">Specifically, a Component is any entity which implements the mPlane protocol specified within this document, advertises its Capabilities and accepts Specifications which request the use of those Capabilities. The measurements, analyses, storage facilities and other services provided by a Component are completely defined by its Capabilities.</p>
+<p id="rfc.section.3.2.1.p.2">Conversely, a Client is any entity which implements the mPlane protocol, receives Capabilities published by one or more Components, and sends Specifications to those Component(s) to perform  measurements and analysis.</p>
+<p id="rfc.section.3.2.1.p.3">Every interaction in the mPlane protocol takes place between a Component and a Client. Indeed, the simplest instantiation of the mPlane architecture consists of one or more Clients taking Capabilities from one or more Components, and sending Specifications to invoke those Capabilities, as shown in <a href="#simple">Figure 1</a>.  An mPlane domain may consist of as little as a single Client and a single Component. In this arrangement, mPlane provides a measurement-oriented RPC mechanism.</p>
 <h1 id="rfc.section.3.2.2"><a href="#rfc.section.3.2.2">3.2.2.</a> <a href="#probes-and-repositories" id="probes-and-repositories">Probes and Repositories</a></h1>
-<p id="rfc.section.3.2.2.p.1">Measurement components can be roughly divided into two categories: probes and repositories. Probes perform measurements, and repositories provide access to stored measurements, analysis of stored measurements, or other access to related external data sources. External databases and data sources (e.g., routing looking glasses, WHOIS services, DNS, etc.) can be made available to mPlane clients through repositories acting as gateways to these external sources, as well.</p>
-<p id="rfc.section.3.2.2.p.2">Note that this categorization is very rough: what a component can do is completely described by its capabilities, and some components may combine properties of both probes and repositories.</p>
-<h1 id="rfc.section.3.2.3"><a href="#rfc.section.3.2.3">3.2.3.</a> <a href="#supervisors-and-federation" id="supervisors-and-federation">Supervisors and Federation</a></h1>
-<p id="rfc.section.3.2.3.p.1">An entity which implements both the client and component interfaces can be used to build and federate domains of mPlane components. This supervisor is responsible for collecting capabilities from a set of components, and providing capabilities based on these to its clients. Application-specific algorithms at the supervisor aggregate the lower-level capabilities provided by these components into higher-level capabilities exposed to its clients. This arrangement is shown in the figure below.</p>
-<div id="rfc.figure.3"/>
-<div id="simple-supervisor"/>
-<pre>
-                    ________________
-                    |              |
-                    |    client    |
-                    |              |
-                    ----------------
-                      ^   n|     |
-           capability |    |     | specification
-                      |    |1    v
-                    ________________
-                  .-|   component  |-.
-                 |  ----------------  |
-                 |     supervisor     |
-                 |  ________________  |
-                  \_|    client    |_/
-                    ----------------
-                      ^   1|     |
-           capability |    |     | specification
-                      |    |m    v
-                    ________________
-                    |              |
-                    |  component   |
-                    |              |
-                    ----------------
-</pre>
-<p class="figure">Figure 3: Simple mPlane architecture with a supervisor</p>
-<p id="rfc.section.3.2.3.p.2">The set of components which respond to specifications from a single supervisor is referred to as an mPlane domain. Domain membership is also determined by the issuer of the certificates identifying the clients, components, and supervisor. Within a given domain, each client and component connects to only one supervisor. Underlying measurement components and clients may indeed participate in multiple domains, but these are separate entities from the point of view of the architecture. Interdomain measurement is supported by federation among supervisors: a local supervisor delegates measurements in a remote domain to that domain&#8217;s supervisor.</p>
-<p id="rfc.section.3.2.3.p.3">In addition to capability composition and specification decomposition, supervisors are responsible for client and component registration and authentication, as well as access control based on  identity information provided by the session protocol (WebSockets) in the general case.</p>
-<p id="rfc.section.3.2.3.p.4">Since the logic for aggregating control and data for a given application is very specific to that application, note that there is no generic supervisor implementation provided with the mPlane SDK.</p>
-<h1 id="rfc.section.3.2.4"><a href="#rfc.section.3.2.4">3.2.4.</a> <a href="#external-interfaces-to-mplane-entities" id="external-interfaces-to-mplane-entities">External Interfaces to mPlane Entities</a></h1>
-<p id="rfc.section.3.2.4.p.1">The mPlane protocol specified in this document is designed for the exchange of control messages in an iterative measurement process, and the retrieval of low volumes of highly aggregated data, primarily that leads to decisions about subsequent measurements and/or a final determination.</p>
-<p id="rfc.section.3.2.4.p.2">For measurements generating large amounts of data (e.g. passive observations of high-rate links, or high-frequency active measurements), mPlane supports indirect export. For indirect export, a client or supervisor directs one component (generally a probe) to send results to another component (generally a repository). This indirect export protocol is completely external to the mPlane protocol; the client must only know that the two components support the same protocol and that the schema of the data produced by the probe matches that accepted by the repository. The typical example consists of passive mPlane-controlled probes exporting volumes of data (e.g., anonymized traces, logs, statistics), to an mPlane-accessible repository out-of-band. The use of out-of-band indirect export is justified to avoid serialization overhead, and to ensure fidelity and reliability of the transfer.</p>
-<p id="rfc.section.3.2.4.p.3">For exploratory analysis of large amounts of data at a repository, it is presumed that clients will have additional back-channel direct access beyond those interactions mediated by mPlane. For instance, a repository backed by a relational database could have a web-based graphical user interface that interacts directly with the database.</p>
+<p id="rfc.section.3.2.2.p.1">Measurement Components can be roughly divided into two categories: probes and repositories. Probes perform measurements, and repositories provide access to stored measurements, analysis of stored measurements, or other access to related external data sources. External databases and data sources (e.g., routing looking glasses, WHOIS services, DNS, etc.) can be made available to mPlane Clients through repositories acting as gateways to these external sources, as well.</p>
+<p id="rfc.section.3.2.2.p.2">Note that this categorization is very rough: what a Component can do is completely described by its Capabilities, and some Components may combine properties of both probes and repositories.</p>
 <h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> <a href="#message-types-and-message-exchange-sequences" id="message-types-and-message-exchange-sequences">Message Types and Message Exchange Sequences</a></h1>
-<p id="rfc.section.3.3.p.1">The basic messages in the mPlane protocol are capabilities, specifications, and results, as described above. The full protocol contains other message types as well. Withdrawals cancel capabilities (i.e., indicate that the component is no longer capable or willing to perform a given measurement) and interrupts cancel specifications (i.e., indicate that the component should stop performing the measurement). Receipts can be given in lieu of results for not-yet completed measurements or queries, and redemptions can be used to retrieve results referred to by a receipt. Exceptions can be sent by clients or components at any time to signal protocol-level errors to their peers.</p>
+<p id="rfc.section.3.3.p.1">The basic messages in the mPlane protocol are Capabilities, Specifications, and Results, as described above. The full protocol contains other message types as well. Withdrawals cancel Capabilities (i.e., indicate that the Component is no longer capable or willing to perform a given measurement) and interrupts cancel Specifications (i.e., indicate that the Component should stop performing the measurement). Receipts can be given in lieu of Results for not-yet completed measurements or queries, and redemptions can be used to retrieve Results referred to by a receipt. Exceptions can be sent by Clients or Components at any time to signal protocol-level errors to their peers.</p>
 <p id="rfc.section.3.3.p.2">The following sequences of messages are possible within the mPlane protocol:</p>
-<div id="rfc.figure.4"/>
+<div id="rfc.figure.2"/>
 <div id="sequence"/>
 <pre>
 Client                 Component
@@ -642,25 +581,25 @@ Client                 Component
   |         . . .          |
   |&lt;---------- Withdrawal -|
 </pre>
-<p class="figure">Figure 4: Possible sequences of messages in the mPlane protocol</p>
-<p id="rfc.section.3.3.p.3">In the nominal sequence, a capability leads to a specification leads to a result, where results may be transmitted by some other protocol. All the paths through the sequence of messages are shown in the diagram above; message types are described in detail in <a href="#message-types">Section 4.2</a>.</p>
+<p class="figure">Figure 2: Possible sequences of messages in the mPlane protocol</p>
+<p id="rfc.section.3.3.p.3">In the nominal sequence, a Capability leads to a Specification leads to a Result, where Results may be transmitted by some other protocol. All the paths through the sequence of messages are shown in the diagram above; message types are described in detail in <a href="#message-types">Section 4.2</a>.</p>
 <p id="rfc.section.3.3.p.4">Separate from the sequence of messages, the mPlane protocol supports two connection establishment patterns:</p>
 <p/>
 
 <ul>
-  <li>Client-initiated, in which clients connect directly to components at known, stable URLs. Client-initiated workflows are intended for use between clients and supervisors, for access to repositories, and for access to probes embedded within a network infrastructure.</li>
-  <li>Component-initiated, in which components initiate connections to clients. Component-initiated workflows are intended for use between components without stable routable addresses and supervisors, e.g. for small probes on embedded devices, mobile devices, or software probes embedded in browsers on personal computers behind network-address translators (NATs) or firewalls which prevent a client from establishing a connection to them.</li>
+  <li>Client-initiated, in which Clients connect directly to Components at known, stable URLs. Client-initiated workflows are intended for use between Clients and supervisors, for access to repositories, and for access to probes embedded within a network infrastructure.</li>
+  <li>Component-initiated, in which Components initiate connections to Clients. Component-initiated workflows are intended for use between Components without stable routable addresses and supervisors, e.g. for small probes on embedded devices, mobile devices, or software probes embedded in browsers on personal computers behind network-address translators (NATs) or firewalls which prevent a Client from establishing a connection to them.</li>
 </ul>
-<p id="rfc.section.3.3.p.6">Within a given mPlane domain, these patterns can be combined (along with indirect export and direct access) to facilitate complex interactions among clients and components according to the requirements imposed by the application and the deployment of components in the network.</p>
+<p id="rfc.section.3.3.p.6">Within a given mPlane domain, these patterns can be combined (along with indirect export and direct access) to facilitate complex interactions among Clients and Components according to the requirements imposed by the application and the deployment of Components in the network.</p>
 <h1 id="rfc.section.3.4"><a href="#rfc.section.3.4">3.4.</a> <a href="#integrating-measurement-tools-into-mplane" id="integrating-measurement-tools-into-mplane">Integrating Measurement Tools into mPlane</a></h1>
-<p id="rfc.section.3.4.p.1">mPlane&#8217;s flexibility and the self-description of measurements provided by the capability-specification-result cycle was designed to allow a wide variety of existing measurement tools, both probes and repositories, to be integrated into an mPlane domain. In both cases, the key to integration is to define a capability for each of the measurements the tool can perform or the queries the repository needs to make available within an mPlane domain. Each capability has a set of parameters - information required to run the measurement or the query - and a set of result columns - information which the measurement or query returns.</p>
+<p id="rfc.section.3.4.p.1">mPlane&#8217;s flexibility and the self-description of measurements provided by the Capability-Specification-Result cycle was designed to allow a wide variety of existing measurement tools, both probes and repositories, to be integrated into an mPlane domain. In both cases, the key to integration is to define a Capability for each of the measurements the tool can perform or the queries the repository needs to make available within an mPlane domain. Each Capability has a set of parameters - information required to run the measurement or the query - and a set of result columns - information which the measurement or query returns.</p>
 <p id="rfc.section.3.4.p.2">The parameters and result columns make up the measurement&#8217;s schema, and are chosen from an extensible registry of elements. Practical details are given in <a href="#designing-measurement-and-repository-schemas">Section 4.5</a>.</p>
 <h1 id="rfc.section.3.5"><a href="#rfc.section.3.5">3.5.</a> <a href="#from-architecture-to-protocol-specification" id="from-architecture-to-protocol-specification">From Architecture to Protocol Specification</a></h1>
-<p id="rfc.section.3.5.p.1">The remainder of this document builds the protocol specification based on this architecture from the bottom up. First, we define the protocol&#8217;s information model from the element registry through the types of mPlane messages and the sections they are composed of. We then define a concrete representation of this information model using Javascript Object Notation (JSON, <a href="#RFC7159">[RFC7159]</a>), and define bindings to WebSockets <a href="#RFC6455">[RFC6455]</a>} over TLS as a session protocol.</p>
+<p id="rfc.section.3.5.p.1">The remainder of this document builds the protocol Specification based on this architecture from the bottom up. First, we define the protocol&#8217;s information model from the element registry through the types of mPlane messages and the sections they are composed of. We then define a concrete representation of this information model using Javascript Object Notation (JSON, <a href="#RFC7159">[RFC7159]</a>), and define bindings to WebSockets <a href="#RFC6455">[RFC6455]</a>} over TLS as a session protocol.</p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#protocol-information-model" id="protocol-information-model">Protocol Information Model</a></h1>
-<p id="rfc.section.4.p.1">The mPlane protocol is message-oriented, built on the representation- and session-protocol-independent exchange of messages between clients and components. This section describes the information model, starting from the element registry which defines the elements from which capabilities can be built, then detailing each type of message, and the sections that make these messages up. It then provides advice on using the information model to model measurements and queries.</p>
+<p id="rfc.section.4.p.1">The mPlane protocol is message-oriented, built on the representation- and session-protocol-independent exchange of messages between Clients and Components. This section describes the information model, starting from the element registry which defines the elements from which Capabilities can be built, then detailing each type of message, and the sections that make these messages up. It then provides advice on using the information model to model measurements and queries.</p>
 <h1 id="rfc.section.4.1"><a href="#rfc.section.4.1">4.1.</a> <a href="#element-registry" id="element-registry">Element Registry</a></h1>
-<p id="rfc.section.4.1.p.1">An element registry makes up the vocabulary by which mPlane components and clients can express the meaning of parameters, metadata, and result columns for mPlane statements. A registry is represented as a JSON <a href="#RFC7159">[RFC7159]</a> object with the following keys:</p>
+<p id="rfc.section.4.1.p.1">An element registry makes up the vocabulary by which mPlane Components and Clients can express the meaning of parameters, metadata, and result columns for mPlane statements. A registry is represented as a JSON <a href="#RFC7159">[RFC7159]</a> object with the following keys:</p>
 <p/>
 
 <ul>
@@ -726,41 +665,41 @@ Client                 Component
   <li>ipfix-pen: The SMI Private Enterprise Number of the equivalent IPFIX <a href="#RFC7011">[RFC7011]</a> Information Element, if any.</li>
 </ul>
 <h1 id="rfc.section.4.2"><a href="#rfc.section.4.2">4.2.</a> <a href="#message-types" id="message-types">Message Types</a></h1>
-<p id="rfc.section.4.2.p.1">Workflows in mPlane are built around the capability - specification - result cycle. Capabilities, specifications, and results are kinds of statements: a capability is a statement that a component can perform some action (generally a measurement); a specification is a statement that a client would like a component to perform the action advertised in a capability; and a result is a statement that a component measured a given set of values at a given point in time according to a specification.</p>
-<p id="rfc.section.4.2.p.2">Other types of messages outside this nominal cycle are referred to as notifications. Types of notifications include Withdrawals, Interrupts, Receipts, Redemptions, and Exceptions. These notify clients or components of conditions within the measurement infrastructure itself, as opposed to directly containing information about measurements or observations.</p>
+<p id="rfc.section.4.2.p.1">Workflows in mPlane are built around the Capability - Specification - Result cycle. Capabilities, Specifications, and Results are kinds of statements: a Capability is a statement that a Component can perform some action (generally a measurement); a Specification is a statement that a Client would like a Component to perform the action advertised in a Capability; and a Result is a statement that a Component measured a given set of values at a given point in time according to a Specification.</p>
+<p id="rfc.section.4.2.p.2">Other types of messages outside this nominal cycle are referred to as notifications. Types of notifications include Withdrawals, Interrupts, Receipts, Redemptions, and Exceptions. These notify Clients or Components of conditions within the measurement infrastructure itself, as opposed to directly containing information about measurements or observations.</p>
 <p id="rfc.section.4.2.p.3">Messages may also be grouped together into a single envelope message. Envelopes allow multiple messages to be represented within a single message, for example multiple Results pertaining to the same Receipt; and multiple Capabilities or Specifications to be transferred in a single transaction in the underlying session protocol.</p>
 <p id="rfc.section.4.2.p.4">The following types of messages are supported by the mPlane protocol:</p>
 <h1 id="rfc.section.4.2.1"><a href="#rfc.section.4.2.1">4.2.1.</a> <a href="#capability-and-withdrawal" id="capability-and-withdrawal">Capability and Withdrawal</a></h1>
-<p id="rfc.section.4.2.1.p.1">A capability is a statement of a component&#8217;s ability and willingness to perform a specific operation, conveyed from a component to a client. It does not represent a guarantee that the specific operation can or will be performed at a specific point in time.</p>
-<p id="rfc.section.4.2.1.p.2">A withdrawal is a notification of a component&#8217;s inability or unwillingness to perform a specific operation. It cancels a previously advertised capability. A withdrawal can also be sent in reply to a specification which attempts to invoke a capability no longer offered.</p>
+<p id="rfc.section.4.2.1.p.1">A Capability is a statement of a Component&#8217;s ability and willingness to perform a specific operation, conveyed from a Component to a Client. It does not represent a guarantee that the specific operation can or will be performed at a specific point in time.</p>
+<p id="rfc.section.4.2.1.p.2">A withdrawal is a notification of a Component&#8217;s inability or unwillingness to perform a specific operation. It cancels a previously advertised Capability. A withdrawal can also be sent in reply to a Specification which attempts to invoke a Capability no longer offered.</p>
 <h1 id="rfc.section.4.2.2"><a href="#rfc.section.4.2.2">4.2.2.</a> <a href="#specification-and-interrupt" id="specification-and-interrupt">Specification and Interrupt</a></h1>
-<p id="rfc.section.4.2.2.p.1">A specification is a statement that a component should perform a specific operation, conveyed from a client to a component. It can be conceptually viewed as a capability whose parameters have been filled in with values.</p>
-<p id="rfc.section.4.2.2.p.2">An interrupt is a notification that a component should stop performing a specific operation, conveyed from client to component. It terminates a previously sent specification. If the specification uses indirect export, the indirect export will simply stop running. If the specification has pending results, those results are returned in response to the interrupt.</p>
+<p id="rfc.section.4.2.2.p.1">A Specification is a statement that a Component should perform a specific operation, conveyed from a Client to a Component. It can be conceptually viewed as a Capability whose parameters have been filled in with values.</p>
+<p id="rfc.section.4.2.2.p.2">An interrupt is a notification that a Component should stop performing a specific operation, conveyed from Client to Component. It terminates a previously sent Specification. If the Specification uses indirect export, the indirect export will simply stop running. If the Specification has pending Results, those Results are returned in response to the interrupt.</p>
 <h1 id="rfc.section.4.2.3"><a href="#rfc.section.4.2.3">4.2.3.</a> <a href="#result" id="result">Result</a></h1>
-<p id="rfc.section.4.2.3.p.1">A result is a statement produced by a component that a particular measurement was taken and the given values were observed, or that a particular operation or analysis was performed and a the given values were produced. It can be conceptually viewed as a specification whose result columns have been filled in with values. Note that, in keeping with the stateless nature of the mPlane protocol, a result contains the full set of parameters from which it was derived.</p>
-<p id="rfc.section.4.2.3.p.2">Note that not every specification will lead to a result being returned; for example, in case of indirect export, only a receipt which can be used for future interruption will be returned, as the results will be conveyed to a third component using an external protocol.</p>
+<p id="rfc.section.4.2.3.p.1">A Result is a statement produced by a Component that a particular measurement was taken and the given values were observed, or that a particular operation or analysis was performed and a the given values were produced. It can be conceptually viewed as a Specification whose Result columns have been filled in with values. Note that, in keeping with the stateless nature of the mPlane protocol, a Result contains the full set of parameters from which it was derived.</p>
+<p id="rfc.section.4.2.3.p.2">Note that not every Specification will lead to a Result being returned; for example, in case of indirect export, only a receipt which can be used for future interruption will be returned, as the results will be conveyed to a third Component using an external protocol.</p>
 <h1 id="rfc.section.4.2.4"><a href="#rfc.section.4.2.4">4.2.4.</a> <a href="#receipt-and-redemption" id="receipt-and-redemption">Receipt and Redemption</a></h1>
-<p id="rfc.section.4.2.4.p.1">A receipt is returned instead of a result by a component in response to a specification which either:</p>
+<p id="rfc.section.4.2.4.p.1">A receipt is returned instead of a Result by a Component in response to a Specification which either:</p>
 <p/>
 
 <ul>
   <li>will never return results, as it initiated an indirect export, or</li>
   <li>will not return results immediately, as the operation producing the results will have a long run time.</li>
 </ul>
-<p id="rfc.section.4.2.4.p.3">Receipts have the same content specification they are returned for.  A component may optionally add a token section, which can be used in future redemptions or interruptions by the client. The content of the token is an opaque string generated by the component.</p>
-<p id="rfc.section.4.2.4.p.4">A redemption is sent from a client to a component for a previously received receipt to attempt to retrieve delayed results. It may contain only the token section, the token and temporal scope, or all sections of the received receipt.</p>
-<p id="rfc.section.4.2.4.p.5">When the temporal scope of a redemption for a running measurement is different than the temporal scope of the original specification, it is treated by the component as a partial redemption: all rows resulting from the measurement within the specified temporal scope are returned as a result. Otherwise, a component responds with a result only when the measurement is complete; otherwise, another receipt is returned.</p>
-<p id="rfc.section.4.2.4.p.6">Note that redemptions are optional: when a component has a result available for a client after some period of time, it may send it immediately, without waiting for a redemption to retrieve it.</p>
+<p id="rfc.section.4.2.4.p.3">Receipts have the same content Specification they are returned for.  A Component may optionally add a token section, which can be used in future redemptions or interruptions by the Client. The content of the token is an opaque string generated by the Component.</p>
+<p id="rfc.section.4.2.4.p.4">A redemption is sent from a Client to a Component for a previously received receipt to attempt to retrieve delayed results. It may contain only the token section, the token and temporal scope, or all sections of the received receipt.</p>
+<p id="rfc.section.4.2.4.p.5">When the temporal scope of a redemption for a running measurement is different than the temporal scope of the original Specification, it is treated by the Component as a partial redemption: all rows resulting from the measurement within the specified temporal scope are returned as a Result. Otherwise, a Component responds with a Result only when the measurement is complete; otherwise, another receipt is returned.</p>
+<p id="rfc.section.4.2.4.p.6">Note that redemptions are optional: when a Component has a Result available for a Client after some period of time, it may send it immediately, without waiting for a redemption to retrieve it.</p>
 <h1 id="rfc.section.4.2.5"><a href="#rfc.section.4.2.5">4.2.5.</a> <a href="#exception" id="exception">Exception</a></h1>
-<p id="rfc.section.4.2.5.p.1">An exception is sent from a client to a component or from a component to a client to signal an exceptional condition within the infrastructure itself.  They are not meant to signal exceptional conditions within a measurement performed by a component; see <a href="#error-handling-in-mplane-workflows">Section 6.3</a> for more.  An exception contains only two sections: an optional token referring back to the message to which the exception is related (if any), and a message section containing free-form, preferably human readable information about the exception.</p>
+<p id="rfc.section.4.2.5.p.1">An exception is sent from a Client to a Component or from a Component to a Client to signal an exceptional condition within the infrastructure itself.  They are not meant to signal exceptional conditions within a measurement performed by a Component; see <a href="#error-handling-in-mplane-workflows">Section 6.3</a> for more.  An exception contains only two sections: an optional token referring back to the message to which the exception is related (if any), and a message section containing free-form, preferably human readable information about the exception.</p>
 <h1 id="rfc.section.4.2.6"><a href="#rfc.section.4.2.6">4.2.6.</a> <a href="#envelope" id="envelope">Envelope</a></h1>
 <p id="rfc.section.4.2.6.p.1">An envelope is used to contain other messages. Message containment is necessary in contexts in which multiple mPlane messages must be grouped into a single transaction in the underlying session protocol. It is legal to group any kind of message, and to mix messages of different types, in an envelope.  However, in the current revision of the protocol, envelopes are primarily intended to be used for three distinct purposes:</p>
 <p/>
 
 <ul>
-  <li>To group multiple capabilities together within a single message (e.g., all the capabilities a given component has).</li>
-  <li>To return multiple results for a single receipt or specification.</li>
-  <li>To group multiple specifications into a single message.</li>
+  <li>To group multiple Capabilities together within a single message (e.g., all the Capabilities a given Component has).</li>
+  <li>To return multiple Results for a single receipt or Specification.</li>
+  <li>To group multiple Specifications into a single message.</li>
 </ul>
 <h1 id="rfc.section.4.3"><a href="#rfc.section.4.3">4.3.</a> <a href="#message-sections" id="message-sections">Message Sections</a></h1>
 <p id="rfc.section.4.3.p.1">Each message is made up of sections, as described in the subsection below. The following table shows the presence of each of these sections in each of the message types supported by mPlane: &#8220;req&#8221; means the section is required, &#8220;opt&#8221; means it is optional, and &#8220;tok&#8221; means it may be replaced by reference via a token when available (i.e., in withdrawals and redemptions); see the subsection on each message section for details.</p>
@@ -917,31 +856,31 @@ Client                 Component
     </tr>
   </tbody>
 </table>
-<p id="rfc.section.4.3.p.2">Withdrawals take the same sections as capabilities; and redemptions and interrupts take the same sections as receipts. Exceptions are not shown in this table.</p>
+<p id="rfc.section.4.3.p.2">Withdrawals take the same sections as Capabilities; and redemptions and interrupts take the same sections as receipts. Exceptions are not shown in this table.</p>
 <h1 id="rfc.section.4.3.1"><a href="#rfc.section.4.3.1">4.3.1.</a> <a href="#message-type-and-verb" id="message-type-and-verb">Message Type and Verb</a></h1>
-<p id="rfc.section.4.3.1.p.1">The verb is the action to be performed by the component. The following verbs are supported by the base mPlane protocol, but arbitrary verbs may be specified by applications:</p>
+<p id="rfc.section.4.3.1.p.1">The verb is the action to be performed by the Component. The following verbs are supported by the base mPlane protocol, but arbitrary verbs may be specified by applications:</p>
 <p/>
 
 <ul>
   <li><samp>measure</samp>: Perform a measurement</li>
   <li><samp>query</samp>: Query a database about a past measurement</li>
-  <li><samp>collect</samp>: Receive results via indirect export</li>
-  <li><samp>callback</samp>: Used for callback control in component-initiated workflows</li>
+  <li><samp>collect</samp>: Receive Results via indirect export</li>
+  <li><samp>callback</samp>: Used for callback control in Component-initiated workflows</li>
 </ul>
-<p id="rfc.section.4.3.1.p.3">In the JSON representation of mPlane messages, the verb is the value of the key corresponding to the message&#8217;s type, represented as a lowercase string (e.g. <samp>capability</samp>, <samp>specification</samp>, <samp>result</samp> and so on).</p>
-<p id="rfc.section.4.3.1.p.4">Roughly speaking, probes implement <samp>measure</samp> capabilities, and repositories implement <samp>query</samp> and <samp>collect</samp> capabilities. Of course, any single component can implement capabilities with any number of different verbs.</p>
-<p id="rfc.section.4.3.1.p.5">Within the SDK, the primary difference between <samp>measure</samp> and <samp>query</samp> is that the temporal scope of a <samp>measure</samp> specification is taken to refer to when the measurement should be scheduled, while the temporal scope of a  <samp>query</samp> specification is taken to refer to the time window (in the past) of a query.</p>
+<p id="rfc.section.4.3.1.p.3">In the JSON representation of mPlane messages, the verb is the value of the key corresponding to the message&#8217;s type, represented as a lowercase string (e.g. <samp>Capability</samp>, <samp>Specification</samp>, <samp>result</samp> and so on).</p>
+<p id="rfc.section.4.3.1.p.4">Roughly speaking, probes implement <samp>measure</samp> Capabilities, and repositories implement <samp>query</samp> and <samp>collect</samp> Capabilities. Of course, any single Component can implement Capabilities with any number of different verbs.</p>
+<p id="rfc.section.4.3.1.p.5">Within the SDK, the primary difference between <samp>measure</samp> and <samp>query</samp> is that the temporal scope of a <samp>measure</samp> Specification is taken to refer to when the measurement should be scheduled, while the temporal scope of a  <samp>query</samp> Specification is taken to refer to the time window (in the past) of a query.</p>
 <p id="rfc.section.4.3.1.p.6">Envelopes have no verb; instead, the value of the <samp>envelope</samp> key is the kind of messages the envelope contains, or <samp>message</samp> if the envelope contains a mixture of different unspecified kinds of messages.</p>
 <h1 id="rfc.section.4.3.2"><a href="#rfc.section.4.3.2">4.3.2.</a> <a href="#version" id="version">Version</a></h1>
 <p id="rfc.section.4.3.2.p.1">The <samp>version</samp> section contains the version of the mPlane protocol to which the message conforms, as an integer serially incremented with each new protocol revision. This section is required in all messages. This document describes version 2 of the protocol.</p>
 <h1 id="rfc.section.4.3.3"><a href="#rfc.section.4.3.3">4.3.3.</a> <a href="#registry" id="registry">Registry</a></h1>
 <p id="rfc.section.4.3.3.p.1">The <samp>registry</samp> section contains the URL identifying the element registry used by this message, and from which the registry can be retrieved. This section is required in all messages containing element names (statements, and receipts/redemptions/interrupts not using tokens for identification; see the <samp>token</samp> section).</p>
 <h1 id="rfc.section.4.3.4"><a href="#rfc.section.4.3.4">4.3.4.</a> <a href="#label" id="label">Label</a></h1>
-<p id="rfc.section.4.3.4.p.1">The <samp>label</samp> section of a statement contains a human-readable label identifying it, intended solely for use when displaying information about messages in user interfaces. Results, receipts, redemptions, and interrupts inherit their label from the specification from which they follow; otherwise, client and component software can arbitrarily assign labels . The use of labels is optional in all messages, but as labels do greatly ease human-readability of arbitrary messages within user interfaces, their use is recommended.</p>
-<p id="rfc.section.4.3.4.p.2">mPlane clients and components should never use the label as a unique identifier for a message, or assume any semantic meaning in the label &#8211; the test of message equality and relatedness is always based upon the schema and values as in <a href="#message-uniqueness-and-idempotence">Section 4.4</a>.</p>
+<p id="rfc.section.4.3.4.p.1">The <samp>label</samp> section of a statement contains a human-readable label identifying it, intended solely for use when displaying information about messages in user interfaces. Results, receipts, redemptions, and interrupts inherit their label from the Specification from which they follow; otherwise, Client and Component software can arbitrarily assign labels . The use of labels is optional in all messages, but as labels do greatly ease human-readability of arbitrary messages within user interfaces, their use is recommended.</p>
+<p id="rfc.section.4.3.4.p.2">mPlane Clients and Components should never use the label as a unique identifier for a message, or assume any semantic meaning in the label &#8211; the test of message equality and relatedness is always based upon the schema and values as in <a href="#message-uniqueness-and-idempotence">Section 4.4</a>.</p>
 <h1 id="rfc.section.4.3.5"><a href="#rfc.section.4.3.5">4.3.5.</a> <a href="#temporal-scope" id="temporal-scope">Temporal Scope (When)</a></h1>
 <p id="rfc.section.4.3.5.p.1">The <samp>when</samp> section of a statement contains its temporal scope.</p>
-<p id="rfc.section.4.3.5.p.2">A temporal scope refers to when a measurement can be run (in a capability), when it should be run (in a specification), or when it was run (in a result). Temporal scopes can be either absolute or relative, and may have an optional period, referring to how often single measurements should be taken.</p>
+<p id="rfc.section.4.3.5.p.2">A temporal scope refers to when a measurement can be run (in a Capability), when it should be run (in a Specification), or when it was run (in a Result). Temporal scopes can be either absolute or relative, and may have an optional period, referring to how often single measurements should be taken.</p>
 <p id="rfc.section.4.3.5.p.3">The general form of a temporal scope (in BNF-like syntax) is as follows:</p>
 <pre>
 when = &lt;singleton&gt; |                # A single point in time
@@ -969,8 +908,8 @@ duration = [ &lt;n&gt; 'd' ] # days
 iso8601 = &lt;n&gt; '-' &lt;n&gt; '-' &lt;n&gt; [' ' &lt;n&gt; ':' &lt;n&gt; ':' &lt;n&gt; [ '.' &lt;n&gt; ]]
 </pre>
 <p id="rfc.section.4.3.5.p.4">All absolute times are always given in UTC and expressed in ISO8601 format with variable precision.</p>
-<p id="rfc.section.4.3.5.p.5">In capabilities, if a period is given it represents the minimum period supported by the measurement; this is done to allow rate limiting. If no period is given, the measurement is not periodic. A capability with a period can only be fulfilled by a specification with period greater than or equal to the period in the capability. Conversely, a capability without a period can only be fulfilled by a specification without a period.</p>
-<p id="rfc.section.4.3.5.p.6">Within a result, only absolute ranges are allowed within the temporal scope, and refers to the time range of the measurements contributing to the result. Note that the use of absolute times here implies that the components and clients within a domain should have relatively well-synchronized clocks, e.g., to be synchronized using the Network Time Protocol <a href="#RFC5905">[RFC5905]</a> in order for results to be temporally meaningful.</p>
+<p id="rfc.section.4.3.5.p.5">In Capabilities, if a period is given it represents the minimum period supported by the measurement; this is done to allow rate limiting. If no period is given, the measurement is not periodic. A Capability with a period can only be fulfilled by a Specification with period greater than or equal to the period in the Capability. Conversely, a Capability without a period can only be fulfilled by a Specification without a period.</p>
+<p id="rfc.section.4.3.5.p.6">Within a Result, only absolute ranges are allowed within the temporal scope, and refers to the time range of the measurements contributing to the Result. Note that the use of absolute times here implies that the Components and Clients within a domain should have relatively well-synchronized clocks, e.g., to be synchronized using the Network Time Protocol <a href="#RFC5905">[RFC5905]</a> in order for Results to be temporally meaningful.</p>
 <p id="rfc.section.4.3.5.p.7">So, for example, an absolute range in time might be expressed as:</p>
 <p>
   <samp>when: 2009-02-20 13:02:15 ... 2014-04-04 04:27:19</samp>
@@ -979,34 +918,34 @@ iso8601 = &lt;n&gt; '-' &lt;n&gt; '-' &lt;n&gt; [' ' &lt;n&gt; ':' &lt;n&gt; ':'
 <p>
   <samp>when: 2009-04-04 04:00:00 + 3d12h</samp>
 </p>
-<p id="rfc.section.4.3.5.p.11">In a specification for running an immediate measurement for three hours every seven and a half minutes:</p>
+<p id="rfc.section.4.3.5.p.11">In a Specification for running an immediate measurement for three hours every seven and a half minutes:</p>
 <p>
   <samp>when: now + 3h / 7m30s</samp>
 </p>
-<p id="rfc.section.4.3.5.p.13">In a capability noting that a Repository can answer questions about the past:</p>
+<p id="rfc.section.4.3.5.p.13">In a Capability noting that a Repository can answer questions about the past:</p>
 <p><samp>when: past ... now</samp>.</p>
-<p id="rfc.section.4.3.5.p.15">In a specification requesting that a measurement run from a specified point in time until interrupted:</p>
+<p id="rfc.section.4.3.5.p.15">In a Specification requesting that a measurement run from a specified point in time until interrupted:</p>
 <p>
   <samp>when: 2017-11-23 18:30:00 ... future</samp>
 </p>
 <h1 id="rfc.section.4.3.6"><a href="#rfc.section.4.3.6">4.3.6.</a> <a href="#parameters" id="parameters">Parameters</a></h1>
-<p id="rfc.section.4.3.6.p.1">The <samp>parameters</samp> section of a message contains an ordered list of the parameters for a given measurement: values which must be provided by a client to a component in a specification to convey the specifics of the measurement to perform. Each parameter in an mPlane message is a key-value pair, where the key is the name of an element from the element registry. In specifications and results, the value is the value of the parameter. In capabilities, the value is a constraint on the possible values the component will accept for the parameter in a subsequent specification.</p>
+<p id="rfc.section.4.3.6.p.1">The <samp>parameters</samp> section of a message contains an ordered list of the parameters for a given measurement: values which must be provided by a Client to a Component in a Specification to convey the specifics of the measurement to perform. Each parameter in an mPlane message is a key-value pair, where the key is the name of an element from the element registry. In Specifications and Results, the value is the value of the parameter. In Capabilities, the value is a constraint on the possible values the Component will accept for the parameter in a subsequent Specification.</p>
 <p id="rfc.section.4.3.6.p.2">Four kinds of constraints are currently supported for mPlane parameters:</p>
 <p/>
 
 <ul>
   <li>No constraint: all values are allowed. This is signified by the special constraint string &#8216;<samp>*</samp>&#8217;.</li>
-  <li>Single value constraint: only a single value is allowed. This is intended for use for capabilities which are conceivably configurable, but for which a given component only supports a single value for a given parameter due to its own out-of-band configuration or the permissions of the client for which the capability is valid. For example, the source address of an active measurement of a single-homed probe might be given as &#8216;<samp>source.ip4: 192.0.2.19</samp>&#8217;.</li>
+  <li>Single value constraint: only a single value is allowed. This is intended for use for Capabilities which are conceivably configurable, but for which a given Component only supports a single value for a given parameter due to its own out-of-band configuration or the permissions of the Client for which the Capability is valid. For example, the source address of an active measurement of a single-homed probe might be given as &#8216;<samp>source.ip4: 192.0.2.19</samp>&#8217;.</li>
   <li>Set constraint: multiple values are allowed, and are explicitly listed, separated by the &#8216;<samp>,</samp>&#8217; character. For example, a multi-homed probe allowing two potential source addresses on two different networks might be given as &#8216;<samp>source.ip4: 192.0.2.19, 192.0.3.21</samp>&#8217;.</li>
   <li>Range constraint: multiple values are allowed, between two ordered values, separated by the special string &#8216;<samp>...</samp>&#8217;. Range constraints are inclusive. A measurement allowing a restricted range of source ports might be expressed as &#8216;<samp>source.port: 32768 ... 65535</samp>&#8217;</li>
   <li>Prefix constraint: multiple values are allowed within a single network, as specified by a network address and a prefix. A prefix constraint may be satisfied by any network of host address completely contained within the prefix. An example allowing probing of any host within a given /24 might be &#8216;<samp>destination.ip4: 192.0.2.0/24</samp>&#8217;.</li>
 </ul>
 <p id="rfc.section.4.3.6.p.4">Parameter and constraint values must be a representation of an instance of the primitive type of the associated element.</p>
 <h1 id="rfc.section.4.3.7"><a href="#rfc.section.4.3.7">4.3.7.</a> <a href="#metadata" id="metadata">Metadata</a></h1>
-<p id="rfc.section.4.3.7.p.1">The <samp>metadata</samp> section contains measurement metadata: key-value pairs associated with a capability inherited by its specification and results. Metadata can also be thought of as immutable parameters. This is intended to represent information which can be used to make decisions at the client as to the applicability of a given capability (e.g. details of algorithms used or implementation-specific information) as well as to make adjustments at post-measurement analysis time when contained within results.</p>
+<p id="rfc.section.4.3.7.p.1">The <samp>metadata</samp> section contains measurement metadata: key-value pairs associated with a Capability inherited by its Specification and Results. Metadata can also be thought of as immutable parameters. This is intended to represent information which can be used to make decisions at the Client as to the applicability of a given Capability (e.g. details of algorithms used or implementation-specific information) as well as to make adjustments at post-measurement analysis time when contained within Results.</p>
 <p id="rfc.section.4.3.7.p.2">An example metadata element might be &#8216;<samp>measurement.identifier: qof</samp>&#8217;, which identifies the underlying tool taking measurements, such that later analysis can correct for known peculiarities in the implementation of the tool.  Another example might be &#8216;<samp>location.longitude = 8.55272</samp>&#8217;, which while not particularly useful for analysis purposes, can be used to draw maps of measurements.</p>
 <h1 id="rfc.section.4.3.8"><a href="#rfc.section.4.3.8">4.3.8.</a> <a href="#result-columns-and-values" id="result-columns-and-values">Result Columns and Values</a></h1>
-<p id="rfc.section.4.3.8.p.1">Results are represented using two sections: <samp>results</samp> which identify the elements to be returned by the measurement, and <samp>resultvalues</samp> which contains the actual values. <samp>results</samp> appear in all statements, while <samp>resultvalues</samp> appear only in result messages.</p>
+<p id="rfc.section.4.3.8.p.1">Results are represented using two sections: <samp>results</samp> which identify the elements to be returned by the measurement, and <samp>resultvalues</samp> which contains the actual values. <samp>results</samp> appear in all statements, while <samp>resultvalues</samp> appear only in Result messages.</p>
 <p id="rfc.section.4.3.8.p.2">The <samp>results</samp> section contains an ordered list of result columns for a given measurement: names of elements which will be returned by the measurement. The result columns are identified by the names of the elements from the element registry.</p>
 <p id="rfc.section.4.3.8.p.3">The <samp>resultvalues</samp> section contains an ordered list of ordered lists (or, rather, a two dimensional array) of values of results for a given measurement, in row-major order. The columns in the result values appear in the same order as the columns in the <samp>results</samp> section.</p>
 <p id="rfc.section.4.3.8.p.4">Values for each column must be a representation of an instance of the primitive type of the associated result column element.</p>
@@ -1015,38 +954,37 @@ iso8601 = &lt;n&gt; '-' &lt;n&gt; '-' &lt;n&gt; [' ' &lt;n&gt; ':' &lt;n&gt; ':'
 <p/>
 
 <ul>
-  <li>For capabilities with the <samp>collect</samp> verb, the <samp>export</samp> section contains the URL of the collector which can accept indirect export for the schema defined by the <samp>parameters</samp> and <samp>results</samp> sections of the capability, using the protocol identified by the URL&#8217;s schema.</li>
-  <li>For capabilities with any verb other than <samp>collect</samp>, the <samp>export</samp> section contains either the URL of a collector to which the component can indirectly export results, or a URL schema identifying a protocol over which the component can export to arbitrary collectors.</li>
-  <li>For specifications with any verb other than <samp>collect</samp>, the <samp>export</samp> section contains the URL of a collector to which the component should indirectly export results. A receipt will be returned for such specifications.</li>
+  <li>For Capabilities with the <samp>collect</samp> verb, the <samp>export</samp> section contains the URL of the collector which can accept indirect export for the schema defined by the <samp>parameters</samp> and <samp>results</samp> sections of the Capability, using the protocol identified by the URL&#8217;s schema.</li>
+  <li>For Capabilities with any verb other than <samp>collect</samp>, the <samp>export</samp> section contains either the URL of a collector to which the Component can indirectly export results, or a URL schema identifying a protocol over which the Component can export to arbitrary collectors.</li>
+  <li>For Specifications with any verb other than <samp>collect</samp>, the <samp>export</samp> section contains the URL of a collector to which the Component should indirectly export results. A receipt will be returned for such Specifications.</li>
 </ul>
-<p id="rfc.section.4.3.9.p.3">If a component can indirectly export or indirectly collect using multiple protocols, each of those protocols must be identified by its own capability; capabilities with an <samp>export</samp> section can only be used by specifications with a matching <samp>export</samp> section.</p>
+<p id="rfc.section.4.3.9.p.3">If a Component can indirectly export or indirectly collect using multiple protocols, each of those protocols must be identified by its own Capability; Capabilities with an <samp>export</samp> section can only be used by Specifications with a matching <samp>export</samp> section.</p>
 <h1 id="rfc.section.4.3.10"><a href="#rfc.section.4.3.10">4.3.10.</a> <a href="#link" id="link">Link</a></h1>
-<p id="rfc.section.4.3.10.p.1">The <samp>link</samp> section contains the URL to which messages in the next step in the workflow (i.e. a specification for a capability, a result or receipt for a specification) can be sent, providing indirection. The link URL must currently have the schema <samp>wss</samp>, and refers to the URL to which to initiate a connection.</p>
-<p id="rfc.section.4.3.10.p.2">If present in a capability, the client must send specifications for the given capability to the component at the URL given in order to use the capability, connecting to the URL if no connection is currently established. If present in a specification, the component must send results for the given specification back to the client at the URL given, connecting to the URL if no connection is currently established.</p>
+<p id="rfc.section.4.3.10.p.1">The <samp>link</samp> section contains the URL to which messages in the next step in the workflow (i.e. a Specification for a Capability, a Result or receipt for a Specification) can be sent, providing indirection. The link URL must currently have the schema <samp>wss</samp>, and refers to the URL to which to initiate a connection.</p>
+<p id="rfc.section.4.3.10.p.2">If present in a Capability, the Client must send Specifications for the given Capability to the Component at the URL given in order to use the Capability, connecting to the URL if no connection is currently established. If present in a Specification, the Component must send Results for the given Specification back to the Client at the URL given, connecting to the URL if no connection is currently established.</p>
 <h1 id="rfc.section.4.3.11"><a href="#rfc.section.4.3.11">4.3.11.</a> <a href="#token" id="token">Token</a></h1>
-<p id="rfc.section.4.3.11.p.1">The <samp>token</samp> section contains an arbitrary string by which a message may be identified in subsequent communications in an abbreviated fashion. Unlike labels, tokens are not necessarily intended to be human-readable; instead, they provide a way to reduce redundancy on the wire by replacing the parameters, metadata, and results sections in messages within a workflow, at the expense of requiring more state at clients and components. Their use is optional.</p>
-<p id="rfc.section.4.3.11.p.2">Tokens are scoped to the association between the component and client in which they are first created; i.e., at a component, the token will be associated with the client&#8217;s identity, and vice-versa at a client. Tokens should be created with sufficient entropy to avoid collision from independent processes at the same client or token reuse in the case of client or component state loss at restart.</p>
-<p id="rfc.section.4.3.11.p.3">If a capability contains a token, it may be subsequently withdrawn by the same component using a withdrawal containing the token instead of the parameters, metadata, and results sections.</p>
-<p id="rfc.section.4.3.11.p.4">If a specification contains a token, it may be answered by the component with a receipt containing the token instead of the parameters, metadata, and results sections. A specification containing a token may likewise be interrupted by the client with an interrupt containing the token. A component must not answer a specification with a token with a receipt or result containing a different token, but the token may be omitted in subsequent receipts and results.</p>
-<p id="rfc.section.4.3.11.p.5">If a receipt contains a token, it may be redeemed by the same client using a redemption containing the token instead of the parameters, metadata, and results sections.</p>
-<p id="rfc.section.4.3.11.p.6">When grouping multiple results from a repeating specification into an envelope, the envelope may contain the token of the repeating specification.</p>
+<p id="rfc.section.4.3.11.p.1">The <samp>token</samp> section contains an arbitrary string by which a message may be identified in subsequent communications in an abbreviated fashion. Unlike labels, tokens are not necessarily intended to be human-readable; instead, they provide a way to reduce redundancy on the wire by replacing the parameters, metadata, and results sections in messages within a workflow, at the expense of requiring more state at Clients and Components. Their use is optional.</p>
+<p id="rfc.section.4.3.11.p.2">Tokens are scoped to the association between the Component and Client in which they are first created; i.e., at a Component, the token will be associated with the Client&#8217;s identity, and vice-versa at a Client. Tokens should be created with sufficient entropy to avoid collision from independent processes at the same Client or token reuse in the case of Client or Component state loss at restart.</p>
+<p id="rfc.section.4.3.11.p.3">If a Capability contains a token, it may be subsequently withdrawn by the same Component using a withdrawal containing the token instead of the parameters, metadata, and results sections.</p>
+<p id="rfc.section.4.3.11.p.4">If a Specification contains a token, it may be answered by the Component with a receipt containing the token instead of the parameters, metadata, and results sections. A Specification containing a token may likewise be interrupted by the Client with an interrupt containing the token. A Component must not answer a Specification with a token with a receipt or Result containing a different token, but the token may be omitted in subsequent receipts and Results.</p>
+<p id="rfc.section.4.3.11.p.5">If a receipt contains a token, it may be redeemed by the same Client using a redemption containing the token instead of the parameters, metadata, and results sections.</p>
 <h1 id="rfc.section.4.3.12"><a href="#rfc.section.4.3.12">4.3.12.</a> <a href="#contents" id="contents">Contents</a></h1>
 <p id="rfc.section.4.3.12.p.1">The <samp>contents</samp> section appears only in envelopes, and is an ordered list of messages. If the envelope&#8217;s kind identifies a message kind, the contents may contain only messages of the specified kind, otherwise if the kind is <samp>message</samp>, the contents may contain a mix of any kind of message.</p>
 <h1 id="rfc.section.4.4"><a href="#rfc.section.4.4">4.4.</a> <a href="#message-uniqueness-and-idempotence" id="message-uniqueness-and-idempotence">Message Uniqueness and Idempotence</a></h1>
-<p id="rfc.section.4.4.p.1">Messages in the mPlane protocol are intended to support state distribution: capabilities, specifications, and results are meant to be complete declarations of the state of a given measurement. In order for this to hold, it must be possible for messages to be uniquely identifiable, such that duplicate messages can be recognized. With one important exception (i.e., specifications with relative temporal scopes), messages are idempotent: the receipt of a duplicate message at a client or component is a null operation.</p>
+<p id="rfc.section.4.4.p.1">Messages in the mPlane protocol are intended to support state distribution: Capabilities, Specifications, and Results are meant to be complete declarations of the state of a given measurement. In order for this to hold, it must be possible for messages to be uniquely identifiable, such that duplicate messages can be recognized. With one important exception (i.e., Specifications with relative temporal scopes), messages are idempotent: the receipt of a duplicate message at a Client or Component is a null operation.</p>
 <h1 id="rfc.section.4.4.1"><a href="#rfc.section.4.4.1">4.4.1.</a> <a href="#message-schema" id="message-schema">Message Schema</a></h1>
 <p id="rfc.section.4.4.1.p.1">The combination of elements in the <samp>parameters</samp> and <samp>results</samp> sections, together with the registry from which these elements are drawn, is referred to as a message&#8217;s schema. The schema of a measurement can be loosely thought of as the definition of the table, rows of which the message represents.</p>
 <p id="rfc.section.4.4.1.p.2">The schema contributes not only to the identity of a message, but also to the semantic interpretation of the parameter and result values. The meanings of element values in mPlane are dependent on the other elements present in the message; in other words, the key to interpreting an mPlane message is that the unit of semantic identity is a message. For example, the element &#8216;<samp>destination.ip4</samp>&#8217; as a parameter means &#8220;the target of a given active measurement&#8221; when together with elements describing an active metric (e.g. &#8216;<samp>delay.twoway.icmp.us</samp>&#8217;), but &#8220;the destination of the packets in a flow&#8221; when together with other elements in result columns describing a passively-observed flow.</p>
 <p id="rfc.section.4.4.1.p.3">The interpretation of the semantics of an entire message is application-specific. The protocol does not forbid the transmission of messages representing semantically meaningless or ambiguous schemas.</p>
 <h1 id="rfc.section.4.4.2"><a href="#rfc.section.4.4.2">4.4.2.</a> <a href="#message-identity" id="message-identity">Message Identity</a></h1>
 <p id="rfc.section.4.4.2.p.1">A message&#8217;s identity is composed of its schema, together with its temporal scope, metadata, parameter values, and indirect export properties. Concretely, the full content of the <samp>registry</samp>, <samp>when</samp>, <samp>parameters</samp>, <samp>metadata</samp>, <samp>results</samp>, and <samp>export</samp> sections taken together comprise the message&#8217;s identity.</p>
-<p id="rfc.section.4.4.2.p.2">One convenience feature complicates this somewhat: when the temporal scope is not absolute, multiple specifications may have the same literal temporal scope but refer to different measurements. In this case, the current time at the client or component when a message is invoked must be taken as part of the message&#8217;s identity as well. Implementations may use hashes over the values of the message&#8217;s identity sections to uniquely identify messages; e.g. to generate message tokens.</p>
+<p id="rfc.section.4.4.2.p.2">One convenience feature complicates this somewhat: when the temporal scope is not absolute, multiple Specifications may have the same literal temporal scope but refer to different measurements. In this case, the current time at the Client or Component when a message is invoked must be taken as part of the message&#8217;s identity as well. Implementations may use hashes over the values of the message&#8217;s identity sections to uniquely identify messages; e.g. to generate message tokens.</p>
 <h1 id="rfc.section.4.5"><a href="#rfc.section.4.5">4.5.</a> <a href="#designing-measurement-and-repository-schemas" id="designing-measurement-and-repository-schemas">Designing Measurement and Repository Schemas</a></h1>
-<p id="rfc.section.4.5.p.1">As noted, the key to integrating a measurement tool into an mPlane infrastructure is properly defining the schemas for the measurements and queries it performs, then defining those schemas in terms of mPlane capabilities. Specifications and results follow naturally from capabilities, and the mPlane SDK allows Python methods to be bound to capabilities in order to execute them. A schema should be defined such that the set of parameters, the set of result columns, and the verb together naturally and uniquely define the measurement or the query being performed. For simple metrics, this is achieved by encoding the entire meaning of the  metric in its name. For example, <samp>delay.twoway.icmp.us</samp> as a result column together with <samp>source.ip4</samp> and <samp>destination.ip4</samp> as parameters uniquely defines a single ping measurement, measured via ICMP, expressed in microseconds.</p>
+<p id="rfc.section.4.5.p.1">As noted, the key to integrating a measurement tool into an mPlane infrastructure is properly defining the schemas for the measurements and queries it performs, then defining those schemas in terms of mPlane Capabilities. Specifications and Results follow naturally from Capabilities, and the mPlane SDK allows Python methods to be bound to Capabilities in order to execute them. A schema should be defined such that the set of parameters, the set of result columns, and the verb together naturally and uniquely define the measurement or the query being performed. For simple metrics, this is achieved by encoding the entire meaning of the  metric in its name. For example, <samp>delay.twoway.icmp.us</samp> as a result column together with <samp>source.ip4</samp> and <samp>destination.ip4</samp> as parameters uniquely defines a single ping measurement, measured via ICMP, expressed in microseconds.</p>
 <p id="rfc.section.4.5.p.2">Aggregate measurements are defined by returning metrics with aggregations: <samp>delay.twoway.icmp.min.us</samp>, <samp>delay.twoway.icmp.max.us</samp>, <samp>delay.twoway.icmp.mean.us</samp>, and <samp>delay.twoway.icmp.count.us</samp> as result columns represent aggregate ping measurements with multiple samples.</p>
-<p id="rfc.section.4.5.p.3">Note that mPlane results may contain multiple rows. In this case, the parameter values in the result, taken from the specification, apply to all rows. In this case, the rows are generally differentiated by the values in one or more result columns; for example, the <samp>time</samp> element can be used to represent time series, or the <samp>hops.ip</samp> different elements along a path between source and destination, as in a traceroute measurement.</p>
+<p id="rfc.section.4.5.p.3">Note that mPlane Results may contain multiple rows. In this case, the parameter values in the Result, taken from the Specification, apply to all rows. In this case, the rows are generally differentiated by the values in one or more result columns; for example, the <samp>time</samp> element can be used to represent time series, or the <samp>hops.ip</samp> different elements along a path between source and destination, as in a traceroute measurement.</p>
 <p id="rfc.section.4.5.p.4">For measurements taken instantaneously, the verb <samp>measure</samp> should be used; for direct queries from repositories, the verb <samp>query</samp> should be used. Other actions that cannot be differentiated by schema alone should be differentiated by a custom verb.</p>
-<p id="rfc.section.4.5.p.5">When integrating a repository into an mPlane infrastructure, only a subset of the queries the repository can perform will generally be exposed via the mPlane interface. Consider a generic repository which provides an SQL interface for querying data; wrapping the entire set of possible queries in specific capabilities would be impossible, while providing direct access to the underlying SQL (for instance, by creating a custom registry with a <samp>query.sql</samp> string element to be used as a parameter) would make it impossible to differentiate capabilities by schema (thereby making the interoperability benefits of mPlane integration pointless). Instead, specific queries to be used by clients in concert with capabilities provided by other components are each wrapped within a separate capability, analogous to stored procedure programming in many database engines. Of course, clients which do speak the precise dialect of SQL necessary can integrate directly with the repository separate from the capabilities provided over mPlane.</p>
+<p id="rfc.section.4.5.p.5">When integrating a repository into an mPlane infrastructure, only a subset of the queries the repository can perform will generally be exposed via the mPlane interface. Consider a generic repository which provides an SQL interface for querying data; wrapping the entire set of possible queries in specific Capabilities would be impossible, while providing direct access to the underlying SQL (for instance, by creating a custom registry with a <samp>query.sql</samp> string element to be used as a parameter) would make it impossible to differentiate Capabilities by schema (thereby making the interoperability benefits of mPlane integration pointless). Instead, specific queries to be used by Clients in concert with Capabilities provided by other Components are each wrapped within a separate Capability, analogous to stored procedure programming in many database engines. Of course, Clients which do speak the precise dialect of SQL necessary can integrate directly with the repository separate from the Capabilities provided over mPlane.</p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#representations-and-session-protocols" id="representations-and-session-protocols">Representations and Session Protocols</a></h1>
 <p id="rfc.section.5.p.1">The mPlane protocol is built atop an abstract data model in order to support multiple representations and session protocols. The canonical representation supported by the present SDK involves JSON <a href="#RFC7159">[RFC7159]</a> objects transported via Websockets <a href="#RFC6455">[RFC6455]</a> over TLS <a href="#RFC5246">[RFC5246]</a> (known by the &#8220;wss&#8221; URL schema).</p>
 <h1 id="rfc.section.5.1"><a href="#rfc.section.5.1">5.1.</a> <a href="#json-representation" id="json-representation">JSON representation</a></h1>
@@ -1077,7 +1015,7 @@ iso8601 = &lt;n&gt; '-' &lt;n&gt; '-' &lt;n&gt; [' ' &lt;n&gt; ':' &lt;n&gt; ':'
 <p id="rfc.section.5.1.1.p.6">Timestamps are represented in <a href="#RFC3339">[RFC3339]</a> and ISO 8601, with two important differences. First, all mPlane timestamps are are expressed in terms of UTC, so time zone offsets are neither required nor supported, and are always taken to be 0. Second, fractional seconds are represented with a variable number of digits after an optional decimal point after the fraction.</p>
 <p id="rfc.section.5.1.1.p.7">Objects are represented as JSON objects.</p>
 <h1 id="rfc.section.5.1.2"><a href="#rfc.section.5.1.2">5.1.2.</a> <a href="#example-mplane-capabilities-and-specifications-in-json" id="example-mplane-capabilities-and-specifications-in-json">Example mPlane Capabilities and Specifications in JSON</a></h1>
-<p id="rfc.section.5.1.2.p.1">To illustrate how mPlane messages are encoded, we consider first two capabilities for a very simple application &#8211; ping &#8211; as mPlane JSON capabilities. The following capability states that the component can measure ICMP two-way delay from 192.0.2.19 to anywhere on the IPv4 Internet, with a minimum delay between individual pings of 1 second, returning aggregate statistics:</p>
+<p id="rfc.section.5.1.2.p.1">To illustrate how mPlane messages are encoded, we consider first two Capabilities for a very simple application &#8211; ping &#8211; as mPlane JSON Capabilities. The following Capability states that the Component can measure ICMP two-way delay from 192.0.2.19 to anywhere on the IPv4 Internet, with a minimum delay between individual pings of 1 second, returning aggregate statistics:</p>
 <pre>
 {
   "capability": "measure",
@@ -1094,7 +1032,7 @@ iso8601 = &lt;n&gt; '-' &lt;n&gt; '-' &lt;n&gt; [' ' &lt;n&gt; ':' &lt;n&gt; ':'
                  "delay.twoway.icmp.count"]
 }
 </pre>
-<p id="rfc.section.5.1.2.p.2">In contrast, the following capability would return timestamped singleton delay measurements given the same parameters:</p>
+<p id="rfc.section.5.1.2.p.2">In contrast, the following Capability would return timestamped singleton delay measurements given the same parameters:</p>
 <pre>
 {
   "capability": "measure",
@@ -1108,7 +1046,7 @@ iso8601 = &lt;n&gt; '-' &lt;n&gt; '-' &lt;n&gt; [' ' &lt;n&gt; ':' &lt;n&gt; ':'
                  "delay.twoway.icmp.us"]
 }
 </pre>
-<p id="rfc.section.5.1.2.p.3">A specification is merely a capability with filled-in parameters, e.g.:</p>
+<p id="rfc.section.5.1.2.p.3">A Specification is merely a Capability with filled-in parameters, e.g.:</p>
 <pre>
 {
   "specification":  "measure",
@@ -1126,7 +1064,7 @@ iso8601 = &lt;n&gt; '-' &lt;n&gt; '-' &lt;n&gt; [' ' &lt;n&gt; ':' &lt;n&gt; ':'
                  "delay.twoway.icmp.count"]
 }
 </pre>
-<p id="rfc.section.5.1.2.p.4">Results are merely specifications with result values filled in and an absolute temporal scope:</p>
+<p id="rfc.section.5.1.2.p.4">Results are merely Specifications with result values filled in and an absolute temporal scope:</p>
 <pre>
 {
   "result":   "measure",
@@ -1149,7 +1087,7 @@ iso8601 = &lt;n&gt; '-' &lt;n&gt; '-' &lt;n&gt; [' ' &lt;n&gt; ':' &lt;n&gt; ':'
                       30] ]
 }
 </pre>
-<p id="rfc.section.5.1.2.p.5">More complex measurements can be modeled by mapping them back to tables with multiple rows. For example, a traceroute capability would be defined as follows:</p>
+<p id="rfc.section.5.1.2.p.5">More complex measurements can be modeled by mapping them back to tables with multiple rows. For example, a traceroute Capability would be defined as follows:</p>
 <pre>
 {
   "capability": "measure",
@@ -1166,7 +1104,7 @@ iso8601 = &lt;n&gt; '-' &lt;n&gt; '-' &lt;n&gt; [' ' &lt;n&gt; ':' &lt;n&gt; ':'
                  "delay.twoway.icmp.us"]
 }
 </pre>
-<p id="rfc.section.5.1.2.p.6">with a corresponding specification:</p>
+<p id="rfc.section.5.1.2.p.6">with a corresponding Specification:</p>
 <pre>
 {
   "specification": "measure",
@@ -1216,7 +1154,7 @@ iso8601 = &lt;n&gt; '-' &lt;n&gt; '-' &lt;n&gt; [' ' &lt;n&gt; ':' &lt;n&gt; ':'
 
 }
 </pre>
-<p id="rfc.section.5.1.2.p.8">Indirect export to a repository with subsequent query requires three capabilities: one in which the repository advertises its ability to accept data over a given external protocol, one in which the probe advertises its ability to export data of the same type using that protocol, and one in which the repository advertises its ability to answer queries about the stored data. Returning to the aggregate ping measurement, first let&#8217;s consider a repository which can accept these measurements via direct POST of mPlane result messages:</p>
+<p id="rfc.section.5.1.2.p.8">Indirect export to a repository with subsequent query requires three Capabilities: one in which the repository advertises its ability to accept data over a given external protocol, one in which the probe advertises its ability to export data of the same type using that protocol, and one in which the repository advertises its ability to answer queries about the stored data. Returning to the aggregate ping measurement, first let&#8217;s consider a repository which can accept these measurements via direct POST of mPlane Result messages:</p>
 <pre>
 {
   "capability": "collect",
@@ -1234,7 +1172,7 @@ iso8601 = &lt;n&gt; '-' &lt;n&gt; '-' &lt;n&gt; [' ' &lt;n&gt; ':' &lt;n&gt; ':'
                  "delay.twoway.icmp.count"]
 }
 </pre>
-<p id="rfc.section.5.1.2.p.9">This capability states that the repository at <samp>wss://repository.example.com:4343/</samp> will accept mPlane result messages matching the specified schema, without any limitations on time. Note that this schema matches that of the export capability provided by the probe:</p>
+<p id="rfc.section.5.1.2.p.9">This Capability states that the repository at <samp>wss://repository.example.com:4343/</samp> will accept mPlane Result messages matching the specified schema, without any limitations on time. Note that this schema matches that of the export Capability provided by the probe:</p>
 <pre>
 {
   "capability": "measure",
@@ -1252,7 +1190,7 @@ iso8601 = &lt;n&gt; '-' &lt;n&gt; '-' &lt;n&gt; [' ' &lt;n&gt; ':' &lt;n&gt; ':'
                  "delay.twoway.icmp.count"]
 }
 </pre>
-<p id="rfc.section.5.1.2.p.10">which differs only from the previous probe capability in that it states that results can be exported via the <samp>wss</samp> protocol. Subsequent queries can be sent to the repository in response to the query capability:</p>
+<p id="rfc.section.5.1.2.p.10">which differs only from the previous probe Capability in that it states that Results can be exported via the <samp>wss</samp> protocol. Subsequent queries can be sent to the repository in response to the query Capability:</p>
 <pre>
 {
   "capability": "query",
@@ -1329,59 +1267,86 @@ iso8601 = &lt;n&gt; '-' &lt;n&gt; '-' &lt;n&gt; [' ' &lt;n&gt; ':' &lt;n&gt; ':'
    }
 </pre>
 <h1 id="rfc.section.5.2"><a href="#rfc.section.5.2">5.2.</a> <a href="#mplane-over-websockets-over-tls" id="mplane-over-websockets-over-tls">mPlane over WebSockets over TLS</a></h1>
-<p id="rfc.section.5.2.p.1">The default session protocol for mPlane is WebSockets <a href="#RFC6455">[RFC6455]</a>. Once a WebSockets handshake between client and component is complete, messages are simply exchanged as outlined in <a href="#message-types">Section 4.2</a> as JSON objects in WebSockets text frames over the channel.</p>
-<p id="rfc.section.5.2.p.2">When WebSockets is used as a session protocol for mPlane, it MUST be used over TLS for mPlane message exchanges. Both TLS clients and servers MUST present certificates for TLS mutual authentication. mPlane components MUST use the certificate presented by the mPlane client to determine the client&#8217;s identity, and therefore the capabilities which it is authorized to invoke. mPlane clients MUST use the certificate presented by the mPlane component to authenticate the results received. mPlane clients and components MUST NOT use network-layer address or name (e.g. derived from DNS PTR queries) information to identify peers.</p>
-<p id="rfc.section.5.2.p.3">mPlane components may either act as WebSockets servers, for client-initiated connection establishment, or as WebSockets clients, for component-initiated connection establishment. In either case, it is the responsibility of the connection initiator to re-establish connection in case it is lost. In this case, the entity acting as WebSockets server SHOULD maintain a queue of pending mPlane messages to identified peers to be sent on reconnection.</p>
+<p id="rfc.section.5.2.p.1">The default session protocol for mPlane is WebSockets <a href="#RFC6455">[RFC6455]</a>. Once a WebSockets handshake between Client and Component is complete, messages are simply exchanged as outlined in <a href="#message-types">Section 4.2</a> as JSON objects in WebSockets text frames over the channel.</p>
+<p id="rfc.section.5.2.p.2">When WebSockets is used as a session protocol for mPlane, it MUST be used over TLS for mPlane message exchanges. Both TLS Clients and servers MUST present certificates for TLS mutual authentication. mPlane Components MUST use the certificate presented by the mPlane Client to determine the Client&#8217;s identity, and therefore the Capabilities which it is authorized to invoke. mPlane Clients MUST use the certificate presented by the mPlane Component to authenticate the Results received. mPlane Clients and Components MUST NOT use network-layer address or name (e.g. derived from DNS PTR queries) information to identify peers.</p>
+<p id="rfc.section.5.2.p.3">mPlane Components may either act as WebSockets servers, for Client-initiated connection establishment, or as WebSockets Clients, for Component-initiated connection establishment. In either case, it is the responsibility of the connection initiator to re-establish connection in case it is lost. In this case, the entity acting as WebSockets server SHOULD maintain a queue of pending mPlane messages to identified peers to be sent on reconnection.</p>
 <h1 id="rfc.section.5.2.1"><a href="#rfc.section.5.2.1">5.2.1.</a> <a href="#mplane-pki-for-websockets" id="mplane-pki-for-websockets">mPlane PKI for WebSockets</a></h1>
-<p id="rfc.section.5.2.1.p.1">The clients and components within an mPlane domain generally share a single certificate issuer, specific to a single mPlane domain. Issuing a certificate to a client or component then grants it membership within the domain. Any client or component within the domain can then communicate with components and clients within that domain. In a domain containing one or more supervisors, all clients and components within the domain can connect to a supervisor. This deployment pattern can be used to scale mPlane domains to large numbers of clients and components without needing to specifically configure each client and component identity at the supervisor.</p>
-<p id="rfc.section.5.2.1.p.2">In the case of interdomain federation, where supervisors connect to each other, each supervisor will have its own issuer. In this case, each supervisor must be configured to trust each remote domain&#8217;s issuer, but only to identify that domain&#8217;s supervisor. This compartmentalization is necessary to keep one domain from authorizing clients within another domain.</p>
+<p id="rfc.section.5.2.1.p.1">The Clients and Components within an mPlane domain generally share a single certificate issuer, specific to a single mPlane domain. Issuing a certificate to a Client or Component then grants it membership within the domain. Any Client or Component within the domain can then communicate with Components and Clients within that domain. In a domain containing one or more supervisors, all Clients and Components within the domain can connect to a supervisor. This deployment pattern can be used to scale mPlane domains to large numbers of Clients and Components without needing to specifically configure each Client and Component identity at the supervisor.</p>
+<p id="rfc.section.5.2.1.p.2">In the case of interdomain federation, where supervisors connect to each other, each supervisor will have its own issuer. In this case, each supervisor must be configured to trust each remote domain&#8217;s issuer, but only to identify that domain&#8217;s supervisor. This compartmentalization is necessary to keep one domain from authorizing Clients within another domain.</p>
 <h1 id="rfc.section.5.2.2"><a href="#rfc.section.5.2.2">5.2.2.</a> <a href="#capability-advertisement-for-websockets" id="capability-advertisement-for-websockets">Capability Advertisement for WebSockets</a></h1>
-<p id="rfc.section.5.2.2.p.1">When a connection is first established between a client and a component, regardless of whether the client or the component initiates the connection, the component sends an envelope containing all the capabilities it wishes to advertise to the client, based on the client&#8217;s identity.</p>
+<p id="rfc.section.5.2.2.p.1">When a connection is first established between a Client and a Component, regardless of whether the Client or the Component initiates the connection, the Component sends an envelope containing all the Capabilities it wishes to advertise to the Client, based on the Client&#8217;s identity.</p>
 <h1 id="rfc.section.5.2.3"><a href="#rfc.section.5.2.3">5.2.3.</a> <a href="#mplane-link-and-export-urls-for-websockets" id="mplane-link-and-export-urls-for-websockets">mPlane Link and Export URLs for WebSockets</a></h1>
-<p id="rfc.section.5.2.3.p.1">Components acting as WebSockets servers (for client-initiated connection establishment) are identified in the Link sections of capabilities and receipts by URLs with the <samp>wss:</samp> schema. Similarly, clients acting as WebSockets servers (for component-initated connection establishment) are identified in the Link sections of specifications by URLs with the <samp>wss:</samp> schema.</p>
-<p id="rfc.section.5.2.3.p.2">When the <samp>wss:</samp> schema appears in the export section of the capability, this represents the component&#8217;s willingness to establish a WebSockets connection over which mPlane result messages will be pushed. A <samp>wss:</samp> schema URL in a specification export section, similarly, directs the component to the WebSockets server to push results to.</p>
-<p id="rfc.section.5.2.3.p.3">Path information in WebSockets URLs is presently unused by the mPlane protocol, but path information MUST be conserved. mPlane clients and components acting as WebSockets servers can use path information as they see fit, for example to separate client and component workflows on the same server (as on a supervisor), to run mPlane and other protocols over WebSockets on the same server, and/or to pass cryptographic tokens for additional context separation or authorization purposes. Future versions of the mPlane protocol may use path information in WebSockets URLs, but this path information will be relative to this conserved &#8220;base&#8221; URL, as opposed to relative to the root.</p>
+<p id="rfc.section.5.2.3.p.1">Components acting as WebSockets servers (for Client-initiated connection establishment) are identified in the Link sections of Capabilities and receipts by URLs with the <samp>wss:</samp> schema. Similarly, Clients acting as WebSockets servers (for Component-initated connection establishment) are identified in the Link sections of Specifications by URLs with the <samp>wss:</samp> schema.</p>
+<p id="rfc.section.5.2.3.p.2">When the <samp>wss:</samp> schema appears in the export section of the Capability, this represents the Component&#8217;s willingness to establish a WebSockets connection over which mPlane Result messages will be pushed. A <samp>wss:</samp> schema URL in a Specification export section, similarly, directs the Component to the WebSockets server to push Results to.</p>
+<p id="rfc.section.5.2.3.p.3">Path information in WebSockets URLs is presently unused by the mPlane protocol, but path information MUST be conserved. mPlane Clients and Components acting as WebSockets servers can use path information as they see fit, for example to separate Client and Component workflows on the same server (as on a supervisor), to run mPlane and other protocols over WebSockets on the same server, and/or to pass cryptographic tokens for additional context separation or authorization purposes. Future versions of the mPlane protocol may use path information in WebSockets URLs, but this path information will be relative to this conserved &#8220;base&#8221; URL, as opposed to relative to the root.</p>
 <h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#deployment-considerations" id="deployment-considerations">Deployment Considerations</a></h1>
 <p id="rfc.section.6.p.1">This section outlines considerations for building larger-scale infrastructures from the building blocks defined in this document.</p>
-<h1 id="rfc.section.6.1"><a href="#rfc.section.6.1">6.1.</a> <a href="#the-role-of-the-supervisor" id="the-role-of-the-supervisor">The Role of the Supervisor</a></h1>
-<p id="rfc.section.6.1.p.1">For simple infrastructures, a set of components may be controlled directly by a client. However, in more complex infrastructures providing support for multiple clients, a supervisor can mediate between clients and components.  From the point of view of the mPlane protocol, a supervisor is merely a combined component and client. The logic binding client and component interfaces within the supervisor is application-specific, as it involves the following operations according to the semantics of each application:</p>
+<h1 id="rfc.section.6.1"><a href="#rfc.section.6.1">6.1.</a> <a href="#supervisors-and-federation" id="supervisors-and-federation">Supervisors and Federation</a></h1>
+<p id="rfc.section.6.1.p.1">For simple infrastructures, a set of Components may be controlled directly by a Client. However, in more complex infrastructures providing support for multiple Clients, a supervisor can mediate between Clients and Components.  This supervisor is responsible for collecting Capabilities from a set of Components, and providing Capabilities based on these to its Clients. From the point of view of the mPlane protocol, a supervisor is merely a combined Component and Client. The logic binding Client and Component interfaces within the supervisor is application-specific, as it involves the following operations according to the semantics of each application:</p>
 <p/>
 
 <ul>
-  <li>translating lower-level capabilities from subordinate components into higher-level (composed) capabilities, according to the application&#8217;s semantics</li>
-  <li>translating higher-level specifications from subordinate components into lower-level (decomposed) specifications</li>
-  <li>relaying or aggregating results from subordinate components to supervisor clients</li>
+  <li>translating lower-level Capabilities from subordinate Components into higher-level (composed) Capabilities, according to the application&#8217;s semantics</li>
+  <li>translating higher-level Specifications from subordinate Components into lower-level (decomposed) Specifications</li>
+  <li>relaying or aggregating Results from subordinate Components to supervisor Clients</li>
 </ul>
-<p id="rfc.section.6.1.p.3">The workflows on each side of the supervisor are independent; indeed, the supervisor itself will generally respond to client-initiated exchanges, and use both component-initiated and supervisor-initiated exchanges with subordinate components.</p>
-<p id="rfc.section.6.1.p.4">Supervisors can of course be nested in this arrangement, e.g. allowing high-level measurements to be aggregated from a set of subdomains, or federation of measurement across administrative domain boundaries.</p>
-<p id="rfc.section.6.1.p.5">In the general case, the component first registers with the supervisor, POSTing its capabilities. The supervisor creates composed capabilities derived from these component capabilities, and makes them available to its client, which GETs them when it connects.</p>
-<p id="rfc.section.6.1.p.6">The client then initiates a measurement by POSTing a specification to the supervisor, which decomposes it into a more-specific specification to pass to the component, and hands the client a receipt for a the measurement. When the component polls the supervisor &#8211; controlled, perhaps, by callback control as described above &#8211; the supervisor passes this derived specification to the component, which executes it and POSTs its results back to the supervisor. When the client redeems its receipt, the supervisor returns results composed from those received from the component.</p>
-<p id="rfc.section.6.1.p.7">This simple example illustrates the three main responsibilities of the supervisor, which are described in more detail below.</p>
+<p id="rfc.section.6.1.p.3">This arrangement is shown in <a href="#simple-supervisor">Figure 3</a>.</p>
+<div id="rfc.figure.3"/>
+<div id="simple-supervisor"/>
+<pre>
+                    ________________
+                    |              |
+                    |    Client    |
+                    |              |
+                    ----------------
+                      ^   n|     |
+           Capability |    |     | Specification
+                      |    |1    v
+                    ________________
+                  .-|   Component  |-.
+                 |  ----------------  |
+                 |     supervisor     |
+                 |  ________________  |
+                  \_|    Client    |_/
+                    ----------------
+                      ^   1|     |
+           Capability |    |     | Specification
+                      |    |m    v
+                    ________________
+                    |              |
+                    |  Component   |
+                    |              |
+                    ----------------
+</pre>
+<p class="figure">Figure 3: Simple mPlane architecture with a supervisor</p>
+<p id="rfc.section.6.1.p.4">The set of Components which respond to Specifications from a single supervisor is referred to as an mPlane domain. Domain membership is also determined by the issuer of the certificates identifying the Clients, Components, and supervisor. Within a given domain, each Client and Component connects to only one supervisor. Underlying measurement Components and Clients may indeed participate in multiple domains, but these are separate entities from the point of view of the architecture. Interdomain measurement is supported by federation among supervisors: a local supervisor delegates measurements in a remote domain to that domain&#8217;s supervisor.</p>
+<p id="rfc.section.6.1.p.5">In addition to Capability composition and Specification decomposition, supervisors are responsible for Client and Component registration and authentication, as well as access control based on identity information provided by the session protocol (WebSockets) in the general case.</p>
+<p id="rfc.section.6.1.p.6">The general responsibilities of a supervisor are elaborated in the subsections below:</p>
 <h1 id="rfc.section.6.1.1"><a href="#rfc.section.6.1.1">6.1.1.</a> <a href="#component-registration" id="component-registration">Component Registration</a></h1>
-<p id="rfc.section.6.1.1.p.1">In order to be able to use components to perform measurements, the supervisor must register the components associated with it. For client-initiated workflows &#8211; large repositories and the address of the components is often a configuration parameter of the supervisor. Capabilities describing the available measurements and queries at large-scale components can even be part of the supervisor&#8217;s externally managed static configuration, or can be dynamically retrieved and updated from the components or from a capability discovery server.</p>
-<p id="rfc.section.6.1.1.p.2">For component-initiated workflows, components connect to the supervisor and POST capabilities and withdrawals, which requires the supervisor to maintain a set of capabilities associated with a set of components currently part of the mPlane infrastructure it supervises.</p>
+<p id="rfc.section.6.1.1.p.1">In order to be able to use Components to perform measurements, the supervisor must register the Components associated with it. For Client-initiated workflows &#8211; large repositories and the address of the Components is often a configuration parameter of the supervisor. Capabilities describing the available measurements and queries at large-scale Components can even be part of the supervisor&#8217;s externally managed static configuration, or can be dynamically retrieved and updated from the Components or from a Capability discovery server.</p>
+<p id="rfc.section.6.1.1.p.2">For Component-initiated workflows, Components connect to the supervisor and send Capabilities and withdrawals, which requires the supervisor to maintain a set of Capabilities associated with a set of Components currently part of the mPlane infrastructure it supervises.</p>
 <h1 id="rfc.section.6.1.2"><a href="#rfc.section.6.1.2">6.1.2.</a> <a href="#client-authentication" id="client-authentication">Client Authentication</a></h1>
-<p id="rfc.section.6.1.2.p.1">For many components &#8211; probes and simple repositories &#8211; very simple authentication often suffices, such that any client with a certificate with an issuer recognized as valid is acceptable, and all capabilities are available to. Larger repositories often need finer grained control, mapping specific peer certificates to identities internal to the repository&#8217;s access control system (e.g. database users).</p>
-<p id="rfc.section.6.1.2.p.2">In an mPlane infrastructure, it is therefore the supervisor&#8217;s responsibility to map client identities to the set of capabilities each client is authorized to access. This mapping is part of the supervisor&#8217;s configuration.</p>
+<p id="rfc.section.6.1.2.p.1">For many Components &#8211; probes and simple repositories &#8211; very simple authentication often suffices, such that any Client with a certificate with an issuer recognized as valid is acceptable, and all Capabilities are available to. Larger repositories often need finer grained control, mapping specific peer certificates to identities internal to the repository&#8217;s access control system (e.g. database users).</p>
+<p id="rfc.section.6.1.2.p.2">In an mPlane infrastructure, it is therefore the supervisor&#8217;s responsibility to map Client identities to the set of Capabilities each Client is authorized to access. This mapping is part of the supervisor&#8217;s configuration.</p>
 <h1 id="rfc.section.6.1.3"><a href="#rfc.section.6.1.3">6.1.3.</a> <a href="#capability-composition-and-specification-decomposition" id="capability-composition-and-specification-decomposition">Capability Composition and Specification Decomposition</a></h1>
-<p id="rfc.section.6.1.3.p.1">The most dominant responsibility of the supervisor is composing capabilities from its subordinate components into aggregate capabilities, and decomposing specifications from clients to more-specific specifications to pass to each component. This operation is always application-specific, as the semantics of the composition and decomposition operations depend on the capabilities available from the components, the granularity of the capabilities to be provided to the clients. It is for this reason that the mPlane SDK does not provide a generic supervisor.</p>
+<p id="rfc.section.6.1.3.p.1">The most dominant responsibility of the supervisor is composing Capabilities from its subordinate Components into aggregate Capabilities, and decomposing Specifications from Clients to more-specific Specifications to pass to each Component. This operation is always application-specific, as the semantics of the composition and decomposition operations depend on the Capabilities available from the Components, the granularity of the Capabilities to be provided to the Clients.</p>
 <h1 id="rfc.section.6.2"><a href="#rfc.section.6.2">6.2.</a> <a href="#indirect-export" id="indirect-export">Indirect Export</a></h1>
-<p id="rfc.section.6.2.p.1">Many common measurement infrastructures involve a large number of probes exporting large volumes of data to a (much) smaller number of repositories, where data is reduced and analyzed. Since (1) the mPlane protocol is not particularly well-suited to the bulk transfer of data and (2) fidelity is better ensured when minimizing translations between representations, the channel between the probes and the repositories is in this case external to mPlane. This indirect export channel runs either a standard export protocol such as IPFIX, or a proprietary protocol unique to the probe/repository pair. It coordinates an exporter which will produce and export data with a collector which will receive it. All that is necessary is that (1) the client, exporter, and collector agree on a schema to define the data to be transferred and (2) the exporter and collector share a common protocol for export.</p>
-<p id="rfc.section.6.2.p.2">Here, we consider a client speaking to an exporter and a collector. The client first receives an export capability from the exporter (with verb <samp>measure</samp> and with a protocol identified in the <samp>export</samp> section) and a collection capability from the collector (with the verb <samp>collect</samp> and with a URL in the <samp>export</samp> section describing where the exporter should export), either via a client-initiated workflow or a capability discovery server. The client then sends a specification to the exporter, which matches the schema and parameter constraints of both the export and collection capabilities, with the collector&#8217;s URL in the <samp>export</samp> section.</p>
-<p id="rfc.section.6.2.p.3">The exporter initiates export to the collector using the specified protocol, and replies with a receipt that can be used to interrupt the export, should it have an indefinite temporal scope. In the meantime, it sends data matching the capability&#8217;s schema directly to the collector.</p>
-<p id="rfc.section.6.2.p.4">This data, or data derived from the analysis thereof, can then be subsequently retrieved by a client using a client-initiated workflow to the collector.</p>
+<p id="rfc.section.6.2.p.1">Many common measurement infrastructures involve a large number of probes exporting large volumes of data to a (much) smaller number of repositories, where data is reduced and analyzed. Since (1) the mPlane protocol is not particularly well-suited to the bulk transfer of data and (2) fidelity is better ensured when minimizing translations between representations, the channel between the probes and the repositories is in this case external to mPlane. This indirect export channel runs either a standard export protocol such as IPFIX, or a proprietary protocol unique to the probe/repository pair.  It coordinates an exporter which will produce and export data with a collector which will receive it. All that is necessary is that (1) the Client, exporter, and collector agree on a schema to define the data to be transferred and (2) the exporter and collector share a common protocol for export.</p>
+<p id="rfc.section.6.2.p.2">Here, we consider a Client speaking to an exporter and a collector. The Client first receives an export Capability from the exporter (with verb <samp>measure</samp> and with a protocol identified in the <samp>export</samp> section) and a collection Capability from the collector (with the verb <samp>collect</samp> and with a URL in the <samp>export</samp> section describing where the exporter should export), either via a Client-initiated workflow or a Capability discovery server. The Client then sends a Specification to the exporter, which matches the schema and parameter constraints of both the export and collection Capabilities, with the collector&#8217;s URL in the <samp>export</samp> section.</p>
+<p id="rfc.section.6.2.p.3">The exporter initiates export to the collector using the specified protocol, and replies with a receipt that can be used to interrupt the export, should it have an indefinite temporal scope. In the meantime, it sends data matching the Capability&#8217;s schema directly to the collector.</p>
+<p id="rfc.section.6.2.p.4">This data, or data derived from the analysis thereof, can then be subsequently retrieved by a Client using a Client-initiated workflow to the collector.</p>
 <h1 id="rfc.section.6.3"><a href="#rfc.section.6.3">6.3.</a> <a href="#error-handling-in-mplane-workflows" id="error-handling-in-mplane-workflows">Error Handling in mPlane Workflows</a></h1>
-<p id="rfc.section.6.3.p.1">Any component may signal an error to its client or supervisor at any time by sending an exception message. While the taxonomy of error messages is at this time left up to each individual component, given the weakly imperative nature of the mPlane protocol, exceptions should be used sparingly, and only to notify components and clients of errors with the mPlane infrastructure itself.</p>
-<p id="rfc.section.6.3.p.2">It is generally presumed that diagnostic information about errors which may require external human intervention to correct will be logged at each component; the mPlane exception facility is not intended as a replacement for logging facilities (such as syslog).</p>
-<p id="rfc.section.6.3.p.3">Specifically, components using component-initiated connection establishment should not use the exception mechanism for common error conditions (e.g., device losing connectivity for small network-edge probes) &#8211; specifications sent to such components are expected to be best-effort. Exceptions should also not be returned for specifications which would normally not be delayed but are due to high load &#8211; receipts should be used in this case, instead.  Likewise, specifications which cannot be fulfilled because they request the use of capabilities that were once available but are no longer should be answered with withdrawals.</p>
-<p id="rfc.section.6.3.p.4">Exceptions should always be sent in reply to messages sent to components or clients which cannot be handled due to a syntactic or semantic error in the message itself.</p>
+<p id="rfc.section.6.3.p.1">Any Component may signal an error to its Client or supervisor at any time by sending an exception message. While the taxonomy of error messages is at this time left up to each individual Component, given the weakly imperative nature of the mPlane protocol, exceptions should be used sparingly, and only to notify Components and Clients of errors with the mPlane infrastructure itself.</p>
+<p id="rfc.section.6.3.p.2">It is generally presumed that diagnostic information about errors which may require external human intervention to correct will be logged at each Component; the mPlane exception facility is not intended as a replacement for logging facilities (such as syslog).</p>
+<p id="rfc.section.6.3.p.3">Specifically, Components using Component-initiated connection establishment should not use the exception mechanism for common error conditions (e.g., device losing connectivity for small network-edge probes) &#8211; Specifications sent to such Components are expected to be best-effort. Exceptions should also not be returned for Specifications which would normally not be delayed but are due to high load &#8211; receipts should be used in this case, instead.  Likewise, Specifications which cannot be fulfilled because they request the use of Capabilities that were once available but are no longer should be answered with withdrawals.</p>
+<p id="rfc.section.6.3.p.4">Exceptions should always be sent in reply to messages sent to Components or Clients which cannot be handled due to a syntactic or semantic error in the message itself.</p>
 <h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a></h1>
-<p id="rfc.section.7.p.1">The mPlane protocol allows the control of network measurement devices. The protocol itself uses WebSockets using TLS as a session layer. TLS mutual authentication must be used for the exchange of mPlane messages, as access control decisions about which clients and components are trusted for which capabilities take identity information from the certificates TLS clients and servers use to identify themselves. Current operational best security practices for the deployment of TLS-secured protocols must be followed for the deployment of mPlane.</p>
+<p id="rfc.section.7.p.1">The mPlane protocol allows the control of network measurement devices. The protocol itself uses WebSockets using TLS as a session layer. TLS mutual authentication must be used for the exchange of mPlane messages, as access control decisions about which Clients and Components are trusted for which Capabilities take identity information from the certificates TLS Clients and servers use to identify themselves. Current operational best security practices for the deployment of TLS-secured protocols must be followed for the deployment of mPlane.</p>
 <p id="rfc.section.7.p.2">Indirect export, as a design feature, presents a potential for information leakage, as indirectly exported data is necessarily related to measurement data and control transported with the mPlane protocol. Though out of scope for this document, indirect export protocols used within an mPlane domain must be secured at least as well as the mPlane protocol itself.</p>
 <h1 id="rfc.section.8"><a href="#rfc.section.8">8.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a></h1>
-<p id="rfc.section.8.p.1">This document has no actions for IANA. Future versions of this document, should it become a standards-track specification, may specify the initial contents of a core mPlane registry to be managed by IANA.</p>
+<p id="rfc.section.8.p.1">This document has no actions for IANA. Future versions of this document, should it become a standards-track Specification, may specify the initial contents of a core mPlane registry to be managed by IANA.</p>
 <h1 id="rfc.section.9"><a href="#rfc.section.9">9.</a> <a href="#contributors" id="contributors">Contributors</a></h1>
-<p id="rfc.section.9.p.1">This document is based on Deliverable 1.4, the architecture and protocol specification document produced by the mPlane project <a href="#D14">[D14]</a>, which is the work of the mPlane consortium, specifically Brian Trammell and Mirja Kuehlewind (the editors of this document), as well as Marco Mellia, Alessandro Finamore, Stefano Pentassuglia, Gianni De Rosa, Fabrizio Invernizzi, Marco Milanesio, Dario Rossi, Saverio Niccolini, Ilias Leontiadis, Tivadar Szemethy, Balas Szabo, Rolf Winter, Michael Faath, Benoit Donnet, and Dimitri Papadimitriou.</p>
+<p id="rfc.section.9.p.1">This document is based on Deliverable 1.4, the architecture and protocol Specification document produced by the mPlane project <a href="#D14">[D14]</a>, which is the work of the mPlane consortium, specifically Brian Trammell and Mirja Kuehlewind (the editors of this document), as well as Marco Mellia, Alessandro Finamore, Stefano Pentassuglia, Gianni De Rosa, Fabrizio Invernizzi, Marco Milanesio, Dario Rossi, Saverio Niccolini, Ilias Leontiadis, Tivadar Szemethy, Balas Szabo, Rolf Winter, Michael Faath, Benoit Donnet, and Dimitri Papadimitriou.</p>
 <h1 id="rfc.section.10"><a href="#rfc.section.10">10.</a> <a href="#acknowledgments" id="acknowledgments">Acknowledgments</a></h1>
 <p id="rfc.section.10.p.1">Thanks to Lingli Deng and Robert Kisteleki for feedback leading to the improvement of this document and the protocol.</p>
 <p id="rfc.section.10.p.2">This work is supported by the European Commission under grant agreement FP7-318627 mPlane and H2020-688421 MAMI, and by the Swiss State Secretariat for Education, Research, and Innovation under contract no. 15.0268. This support does not imply endorsement of the contents of this document.</p>
